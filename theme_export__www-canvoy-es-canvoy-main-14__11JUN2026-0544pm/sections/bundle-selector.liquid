@@ -1,200 +1,93 @@
-<style>
-.bundle-sel {
-  padding: 48px 24px;
-  background: #FFFBF8;
-}
-.bundle-sel__inner {
-  max-width: 680px;
-  margin: 0 auto;
-}
-.bundle-sel__heading {
-  font-size: clamp(20px,2.5vw,28px);
-  font-weight: 800;
-  color: #111827;
-  text-align: center;
-  margin: 0 0 24px;
-}
-.bundle-sel__grid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.bsel-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  border: 2px solid #E5E7EB;
-  border-radius: 12px;
-  cursor: pointer;
-  background: #fff;
-  text-align: left;
-  width: 100%;
-  transition: border-color .15s, background .15s;
-  position: relative;
-}
-.bsel-card.active {
-  border-color: #FF5A1F;
-  background: #FFF8F5;
-}
-.bsel-card input[type="radio"] {
-  accent-color: #FF5A1F;
-  width: 18px; height: 18px; flex-shrink: 0;
-}
-.bsel-card__body { flex: 1; min-width: 0; }
-.bsel-card__title { font-size: 14px; font-weight: 700; color: #111827; }
-.bsel-card__saving { font-size: 12px; color: #16A34A; font-weight: 600; }
-.bsel-card__prices {
-  display: flex; gap: 7px; align-items: baseline;
-  flex-wrap: wrap; margin-top: 2px;
-}
-.bsel-price { font-size: 16px; font-weight: 800; color: #111827; }
-.bsel-compare { font-size: 12px; color: #9CA3AF; text-decoration: line-through; }
-.bsel-unit { font-size: 11px; color: #6B7280; }
-.bsel-badge {
-  font-size: 11px; font-weight: 700;
-  background: #FF5A1F; color: #fff;
-  padding: 3px 10px; border-radius: 20px;
-  white-space: nowrap; flex-shrink: 0;
-}
-.bundle-sel__cta {
-  width: 100%; height: 52px;
-  background: #FF5A1F; color: #fff;
-  border: none; border-radius: 10px;
-  font-size: 16px; font-weight: 700;
-  cursor: pointer;
-  transition: background .15s, transform .1s;
-}
-.bundle-sel__cta:hover { background: #E54D1B; }
-.bundle-sel__cta:active { transform: scale(.98); }
-</style>
-
-<section class="bundle-sel" id="bundle-sel-{{ section.id }}">
-  <div class="bundle-sel__inner">
+<section class="section bundle-selector">
+  <div class="wrap">
     {%- if section.settings.heading != blank -%}
-      <h2 class="bundle-sel__heading">{{ section.settings.heading }}</h2>
+      <h2 class="bundle-selector__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.subheading != blank -%}
+      <p class="bundle-selector__sub">{{ section.settings.subheading }}</p>
     {%- endif -%}
 
-    {%- assign default_idx = 0 -%}
-    {%- assign scan = 0 -%}
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'option' -%}
-        {%- if block.settings.badge_text != blank and default_idx == 0 -%}
-          {%- assign default_idx = scan -%}
-        {%- endif -%}
-        {%- assign scan = scan | plus: 1 -%}
-      {%- endif -%}
-    {%- endfor -%}
-
-    <div class="bundle-sel__grid">
-      {%- assign opt_i = 0 -%}
+    <div class="bundle-selector__grid">
       {%- for block in section.blocks -%}
-        {%- if block.type == 'option' -%}
-          {%- assign is_def = false -%}
-          {%- if opt_i == default_idx -%}{%- assign is_def = true -%}{%- endif -%}
-          <label class="bsel-card{% if is_def %} active{% endif %}"
-                 {{ block.shopify_attributes }}
-                 data-bs-price="{{ block.settings.price }}"
-                 data-bs-title="{{ block.settings.title }}">
-            <input type="radio" name="bundle-sel-{{ section.id }}" value="{{ block.settings.qty }}"
-                   data-qty="{{ block.settings.qty }}"
-                   data-price="{{ block.settings.price }}"
-                   data-title="{{ block.settings.title }}"
-                   {% if is_def %}checked{% endif %}>
-            <div class="bsel-card__body">
-              <div class="bsel-card__title">{{ block.settings.title }}</div>
-              {%- if block.settings.saving_text != blank -%}
-                <div class="bsel-card__saving">{{ block.settings.saving_text }}</div>
-              {%- endif -%}
-              <div class="bsel-card__prices">
-                <span class="bsel-price">{{ block.settings.price }}</span>
-                {%- if block.settings.compare_price != blank -%}
-                  <span class="bsel-compare">{{ block.settings.compare_price }}</span>
-                {%- endif -%}
-                {%- if block.settings.unit_label != blank -%}
-                  <span class="bsel-unit">{{ block.settings.unit_label }}</span>
-                {%- endif -%}
-              </div>
-            </div>
-            {%- if block.settings.badge_text != blank -%}
-              <span class="bsel-badge">{{ block.settings.badge_text }}</span>
+        {%- assign is_featured = block.settings.featured -%}
+        <div class="bundle-card{% if is_featured %} bundle-card--featured{% endif %}" {{ block.shopify_attributes }}>
+          {%- if is_featured and section.settings.featured_label != blank -%}
+            <span class="bundle-card__badge">{{ section.settings.featured_label }}</span>
+          {%- endif -%}
+          <p class="bundle-card__label">{{ block.settings.label }}</p>
+          <div class="bundle-card__price">
+            {%- if block.settings.original_price != blank -%}
+              <span class="bundle-card__compare">{{ block.settings.original_price }}</span>
             {%- endif -%}
-          </label>
-          {%- assign opt_i = opt_i | plus: 1 -%}
-        {%- endif -%}
+            <span class="bundle-card__current">{{ block.settings.price }}</span>
+          </div>
+          {%- if block.settings.saving != blank -%}
+            <p class="bundle-card__saving">{{ block.settings.saving }}</p>
+          {%- endif -%}
+          <ul class="bundle-card__contents">
+            {%- assign items = block.settings.contents | split: '|' -%}
+            {%- for item in items -%}
+              {%- if item != blank -%}<li>{{ item | strip }}</li>{%- endif -%}
+            {%- endfor -%}
+          </ul>
+          <a href="{{ block.settings.url | default: product.url }}" class="btn{% if is_featured %} btn--primary{% else %} btn--outline{% endif %} btn--full">
+            {{ block.settings.cta | default: 'Seleccionar' }}
+          </a>
+        </div>
       {%- endfor -%}
     </div>
-
-    <button class="bundle-sel__cta" id="bsel-atc-{{ section.id }}"
-            data-variant-id="{{ product.selected_or_first_available_variant.id }}"
-            {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
-      {{ section.settings.cta_text | default: 'Añadir al carrito' }}
-    </button>
   </div>
 </section>
 
-<script>
-(function(){
-  var sec = document.getElementById('bundle-sel-{{ section.id }}');
-  if (!sec) return;
-  sec.querySelectorAll('.bsel-card input[type="radio"]').forEach(function(r){
-    r.addEventListener('change', function(){
-      sec.querySelectorAll('.bsel-card').forEach(function(c){ c.classList.remove('active'); });
-      r.closest('.bsel-card').classList.add('active');
-    });
-  });
-  var btn = document.getElementById('bsel-atc-{{ section.id }}');
-  if (btn) {
-    btn.addEventListener('click', function(){
-      var sel = sec.querySelector('.bsel-card input:checked');
-      var qty = sel ? parseInt(sel.dataset.qty, 10) : 1;
-      var vid = parseInt(btn.dataset.variantId, 10);
-      var orig = btn.textContent.trim();
-      btn.textContent = 'Añadiendo…'; btn.disabled = true;
-      fetch('/cart/add.js',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({id: vid, quantity: qty})
-      }).then(function(){
-        btn.textContent = '✓ Añadido';
-        document.dispatchEvent(new CustomEvent('cart:updated'));
-        setTimeout(function(){ btn.textContent = orig; btn.disabled = false; }, 2000);
-      }).catch(function(){ btn.textContent = 'Error'; btn.disabled = false; });
-    });
-  }
-})();
-</script>
+<style>
+  .bundle-selector__heading { text-align: center; font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 800; margin-bottom: 0.5rem; }
+  .bundle-selector__sub { text-align: center; opacity: 0.6; margin-bottom: 2rem; }
+  .bundle-selector__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+  .bundle-card { position: relative; border: 2px solid rgba(0,0,0,0.1); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  .bundle-card--featured { border-color: currentColor; box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+  .bundle-card__badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: currentColor; color: var(--color-bg, #fff); font-size: 0.7rem; font-weight: 800; padding: 0.2rem 0.75rem; border-radius: 99px; white-space: nowrap; }
+  .bundle-card__label { font-weight: 700; font-size: 1rem; text-align: center; }
+  .bundle-card__price { display: flex; align-items: baseline; gap: 0.5rem; justify-content: center; }
+  .bundle-card__compare { text-decoration: line-through; opacity: 0.4; font-size: 0.9rem; }
+  .bundle-card__current { font-size: 1.5rem; font-weight: 800; }
+  .bundle-card__saving { text-align: center; font-size: 0.8rem; font-weight: 600; color: #27ae60; margin: 0; }
+  .bundle-card__contents { list-style: none; padding: 0; font-size: 0.85rem; opacity: 0.7; display: flex; flex-direction: column; gap: 0.25rem; }
+  .bundle-card__contents li::before { content: '✓ '; }
+  @media (max-width: 600px) { .bundle-selector__grid { grid-template-columns: 1fr; } }
+</style>
 
 {% schema %}
 {
-  "name": "Bundle Selector",
+  "name": "Bundle / Pack selector",
+  "tag": "section",
   "settings": [
-    { "type": "text", "id": "heading", "label": "Título", "default": "🐾 COMPRA UN PACK Y AHORRA" },
-    { "type": "text", "id": "cta_text", "label": "Texto botón ATC", "default": "Añadir al carrito" }
+    { "type": "text", "id": "heading", "label": "Título", "default": "Elige tu pack" },
+    { "type": "text", "id": "subheading", "label": "Subtítulo", "default": "Cuantos más pides, más ahorras" },
+    { "type": "text", "id": "featured_label", "label": "Etiqueta del pack destacado", "default": "Más popular" }
   ],
   "blocks": [
     {
-      "type": "option",
-      "name": "Opción de pack",
+      "type": "pack",
+      "name": "Pack",
       "settings": [
-        { "type": "text", "id": "title", "label": "Nombre", "default": "Pack 1" },
-        { "type": "text", "id": "price", "label": "Precio", "default": "" },
-        { "type": "text", "id": "compare_price", "label": "Precio tachado" },
-        { "type": "text", "id": "saving_text", "label": "Texto ahorro" },
-        { "type": "text", "id": "unit_label", "label": "Precio por unidad" },
-        { "type": "text", "id": "badge_text", "label": "Badge", "info": "El primero con badge se pre-selecciona" },
-        { "type": "number", "id": "qty", "label": "Cantidad", "default": 1 }
+        { "type": "text", "id": "label", "label": "Nombre del pack", "default": "Pack 1 unidad" },
+        { "type": "text", "id": "price", "label": "Precio", "default": "24,99 €" },
+        { "type": "text", "id": "original_price", "label": "Precio tachado", "default": "" },
+        { "type": "text", "id": "saving", "label": "Texto de ahorro", "default": "" },
+        { "type": "textarea", "id": "contents", "label": "Contenido (separa con |)", "default": "1 unidad principal | Manual de uso" },
+        { "type": "checkbox", "id": "featured", "label": "Destacar este pack", "default": false },
+        { "type": "url", "id": "url", "label": "URL del producto/variante" },
+        { "type": "text", "id": "cta", "label": "Texto del botón", "default": "Seleccionar" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Bundle Selector",
+      "name": "Bundle / Pack selector",
       "blocks": [
-        { "type": "option", "settings": { "title": "Pack 1", "price": "", "qty": 1 } },
-        { "type": "option", "settings": { "title": "Pack 2", "price": "", "badge_text": "⭐ Más popular", "qty": 2 } },
-        { "type": "option", "settings": { "title": "Pack 3", "price": "", "badge_text": "💰 Mejor precio", "qty": 3 } }
+        { "type": "pack", "settings": { "label": "Pack Básico", "price": "24,99 €", "original_price": "", "saving": "", "contents": "1 unidad principal", "featured": false, "cta": "Seleccionar" } },
+        { "type": "pack", "settings": { "label": "Pack Familia", "price": "39,99 €", "original_price": "49,98 €", "saving": "Ahorras 10 €", "contents": "2 unidades | Envío prioritario", "featured": true, "cta": "Seleccionar" } },
+        { "type": "pack", "settings": { "label": "Pack Premium", "price": "54,99 €", "original_price": "74,97 €", "saving": "Ahorras 20 €", "contents": "3 unidades | Envío prioritario | Regalo sorpresa", "featured": false, "cta": "Seleccionar" } }
       ]
     }
   ]

@@ -1,147 +1,87 @@
-<style>
-.ugc-reviews {
-  padding: 56px 24px;
-  background: #fff;
-}
-.ugc-reviews__inner {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-.ugc-reviews__header {
-  text-align: center;
-  margin-bottom: 32px;
-}
-.ugc-reviews__heading {
-  font-size: clamp(22px,3vw,32px);
-  font-weight: 800;
-  color: #111827;
-  margin: 0 0 8px;
-}
-.ugc-reviews__meta {
-  font-size: 15px;
-  color: #6B7280;
-}
-.ugc-reviews__meta strong { color: #F59E0B; }
-.ugc-reviews__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(280px,100%), 1fr));
-  gap: 16px;
-}
-.ugc-card {
-  background: #FAFAFA;
-  border-radius: 12px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.ugc-card__stars { color: #F59E0B; font-size: 13px; }
-.ugc-card__text {
-  font-size: 14px;
-  color: #374151;
-  line-height: 1.6;
-  flex: 1;
-}
-.ugc-card__image {
-  border-radius: 8px;
-  overflow: hidden;
-  aspect-ratio: 4/3;
-}
-.ugc-card__image img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-}
-.ugc-card__author {
-  font-size: 12px;
-  font-weight: 700;
-  color: #111827;
-}
-.ugc-card__date { font-size: 11px; color: #9CA3AF; }
-.ugc-card__verified {
-  font-size: 11px;
-  color: #16A34A;
-  font-weight: 600;
-}
-</style>
-
-<section class="ugc-reviews" id="reviews-{{ section.id }}">
-  <div class="ugc-reviews__inner">
-    <div class="ugc-reviews__header">
+<section class="section ugc-reviews">
+  <div class="wrap">
+    <div class="section-head section-head--centered">
       {%- if section.settings.heading != blank -%}
-        <h2 class="ugc-reviews__heading">{{ section.settings.heading }}</h2>
+        <h2>{{ section.settings.heading }}</h2>
       {%- endif -%}
-      {%- if section.settings.rating_global != blank -%}
-        <p class="ugc-reviews__meta">
-          <strong>&#9733; {{ section.settings.rating_global }}</strong>
-          {%- if section.settings.review_count != blank -%}
-            &nbsp;&mdash;&nbsp;{{ section.settings.review_count }}
-          {%- endif -%}
-        </p>
+      {%- if section.settings.rating_summary != blank -%}
+        <p class="ugc-reviews__rating-summary">{{ section.settings.rating_summary }}</p>
       {%- endif -%}
     </div>
 
     <div class="ugc-reviews__grid">
       {%- for block in section.blocks -%}
-        {%- if block.type == 'review' -%}
-          <article class="ugc-card" {{ block.shopify_attributes }}>
-            <div class="ugc-card__stars">
-              {%- for i in (1..block.settings.rating) -%}&#9733;{%- endfor -%}
+        <div class="ugc-review-card" {{ block.shopify_attributes }}>
+          {%- if block.settings.photo != blank -%}
+            <img
+              src="{{ block.settings.photo | image_url: width: 400 }}"
+              alt="Foto de {{ block.settings.name | escape }}"
+              width="400" height="400"
+              loading="lazy"
+              class="ugc-review-card__photo"
+            >
+          {%- endif -%}
+          <div class="ugc-review-card__body">
+            <div class="ugc-review-card__stars" aria-label="{{ block.settings.rating }} de 5 estrellas">
+              {%- assign stars = block.settings.rating | default: 5 -%}
+              {%- for i in (1..5) -%}
+                {%- if i <= stars -%}<span aria-hidden="true">★</span>{%- else -%}<span aria-hidden="true" class="star--empty">★</span>{%- endif -%}
+              {%- endfor -%}
             </div>
-            {%- if block.settings.image != blank -%}
-              <div class="ugc-card__image">
-                <img src="{{ block.settings.image | image_url: width: 600 }}"
-                     alt="Foto reseña {{ block.settings.author }}"
-                     width="600" height="450" loading="lazy">
-              </div>
+            {%- if block.settings.title != blank -%}
+              <strong class="ugc-review-card__title">{{ block.settings.title }}</strong>
             {%- endif -%}
-            <p class="ugc-card__text">{{ block.settings.text }}</p>
-            <div>
-              <div class="ugc-card__author">{{ block.settings.author }}</div>
-              {%- if block.settings.date != blank -%}
-                <div class="ugc-card__date">{{ block.settings.date }}</div>
-              {%- endif -%}
-              {%- if block.settings.verified -%}
-                <div class="ugc-card__verified">&#10003; Compra verificada</div>
-              {%- endif -%}
-            </div>
-          </article>
-        {%- endif -%}
+            <p class="ugc-review-card__text">{{ block.settings.text }}</p>
+            <p class="ugc-review-card__author">— {{ block.settings.name }}{%- if block.settings.location != blank -%}, {{ block.settings.location }}{%- endif -%}</p>
+          </div>
+        </div>
       {%- endfor -%}
     </div>
   </div>
 </section>
 
+<style>
+  .ugc-reviews__rating-summary { font-size: 1.1rem; font-weight: 600; margin-top: 0.5rem; opacity: 0.7; }
+  .ugc-reviews__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+  .ugc-review-card { background: var(--color-surface, #f9f9f9); border-radius: 12px; overflow: hidden; }
+  .ugc-review-card__photo { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+  .ugc-review-card__body { padding: 1.25rem; }
+  .ugc-review-card__stars { color: #f5a623; font-size: 1rem; margin-bottom: 0.4rem; }
+  .star--empty { opacity: 0.25; }
+  .ugc-review-card__title { display: block; font-weight: 700; margin-bottom: 0.4rem; }
+  .ugc-review-card__text { font-size: 0.9rem; line-height: 1.55; margin-bottom: 0.6rem; opacity: 0.8; }
+  .ugc-review-card__author { font-size: 0.8rem; opacity: 0.5; margin: 0; }
+</style>
+
 {% schema %}
 {
-  "name": "UGC Reseñas",
+  "name": "Reseñas UGC",
+  "tag": "section",
   "settings": [
     { "type": "text", "id": "heading", "label": "Título", "default": "Lo que dicen nuestros clientes" },
-    { "type": "text", "id": "rating_global", "label": "Rating global", "default": "4.9" },
-    { "type": "text", "id": "review_count", "label": "Texto número de reseñas", "default": "127 reseñas verificadas" }
+    { "type": "text", "id": "rating_summary", "label": "Resumen de rating", "default": "⭐ 4.8 / 5 — más de 2.000 reseñas verificadas" }
   ],
   "blocks": [
     {
       "type": "review",
       "name": "Reseña",
       "settings": [
-        { "type": "image_picker", "id": "image", "label": "Foto del cliente (opcional)" },
-        {
-          "type": "range", "id": "rating", "label": "Puntuación",
-          "min": 1, "max": 5, "step": 1, "default": 5
-        },
-        { "type": "textarea", "id": "text", "label": "Texto de la reseña", "default": "" },
-        { "type": "text", "id": "author", "label": "Nombre del cliente", "default": "" },
-        { "type": "text", "id": "date", "label": "Fecha", "default": "" },
-        { "type": "checkbox", "id": "verified", "label": "Compra verificada", "default": true }
+        { "type": "image_picker", "id": "photo", "label": "Foto del cliente" },
+        { "type": "range", "id": "rating", "label": "Valoración", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "title", "label": "Título de la reseña", "default": "¡Funciona de verdad!" },
+        { "type": "textarea", "id": "text", "label": "Texto", "default": "Llevo 3 semanas usándolo y el cambio es notable. Super recomendado." },
+        { "type": "text", "id": "name", "label": "Nombre", "default": "María G." },
+        { "type": "text", "id": "location", "label": "Ciudad/País", "default": "Madrid" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "UGC Reseñas",
+      "name": "Reseñas UGC",
       "blocks": [
-        { "type": "review", "settings": { "rating": 5, "text": "Exactamente lo que buscaba para mis perros. Se pliega y cabe en el bolsillo del chaleco.", "author": "María G.", "date": "Mayo 2025", "verified": true } },
-        { "type": "review", "settings": { "rating": 5, "text": "Lo usé en una ruta de 3 días. Mis dos perros bebieron sin problema y la comida no se derramó.", "author": "Carlos R.", "date": "Abril 2025", "verified": true } },
-        { "type": "review", "settings": { "rating": 5, "text": "Bonito diseño, fácil de limpiar y resistente. 100% recomendable.", "author": "Laura M.", "date": "Junio 2025", "verified": true } }
+        { "type": "review", "settings": { "rating": 5, "title": "Increíble, lo recomiendo", "text": "Nunca pensé que marcaría tanta diferencia. Ya he pedido uno para mi madre.", "name": "Carlos M.", "location": "Valencia" } },
+        { "type": "review", "settings": { "rating": 5, "title": "Llegó rápido y funciona", "text": "Dudé al principio pero tras dos semanas de uso ya se nota el cambio.", "name": "Laura P.", "location": "Barcelona" } },
+        { "type": "review", "settings": { "rating": 5, "title": "Relación calidad/precio top", "text": "Esperaba algo básico y me sorprendió la calidad. Producto 10.", "name": "Javier R.", "location": "Sevilla" } }
       ]
     }
   ]

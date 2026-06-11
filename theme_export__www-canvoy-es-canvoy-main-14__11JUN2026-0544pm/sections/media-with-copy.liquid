@@ -1,134 +1,96 @@
-<style>
-.mwc-section {
-  padding: 56px 24px;
-  background: var(--mwc-bg, #fff);
-}
-.mwc-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 56px;
-  align-items: center;
-}
-.mwc-inner--right { direction: rtl; }
-.mwc-inner--right > * { direction: ltr; }
-@media(max-width:749px){
-  .mwc-inner { grid-template-columns:1fr; gap:28px; }
-  .mwc-inner--right { direction: ltr; }
-}
-.mwc-media { border-radius: 16px; overflow: hidden; }
-.mwc-media img { width:100%; display:block; object-fit:cover; aspect-ratio:4/3; }
-.mwc-media video { width:100%; display:block; border-radius:16px; }
-.mwc-copy__tag {
-  font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .08em; color: #FF5A1F; margin-bottom: 10px;
-}
-.mwc-copy__heading {
-  font-size: clamp(22px,3vw,34px);
-  font-weight: 800; color: #111827;
-  line-height: 1.2; margin: 0 0 14px;
-}
-.mwc-copy__body {
-  font-size: 15px; color: #4B5563; line-height: 1.7; margin: 0 0 20px;
-}
-.mwc-steps { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px; }
-.mwc-step {
-  display:flex; align-items:flex-start; gap:14px;
-}
-.mwc-step__num {
-  width:32px; height:32px; flex-shrink:0;
-  background:#FF5A1F; color:#fff;
-  border-radius:50%; display:flex;
-  align-items:center; justify-content:center;
-  font-size:13px; font-weight:800;
-}
-.mwc-step__text { font-size:14px; color:#374151; line-height:1.5; padding-top:6px; }
-</style>
+<section class="section media-with-copy">
+  <div class="wrap media-with-copy__inner media-with-copy__inner--{{ section.settings.image_position }}">
 
-<section class="mwc-section" id="mwc-{{ section.id }}">
-  <div class="mwc-inner{% if section.settings.layout == 'image_right' %} mwc-inner--right{% endif %}">
-
-    <div class="mwc-media">
-      {%- if section.settings.video != blank -%}
-        <video src="{{ section.settings.video }}" autoplay muted loop playsinline></video>
+    <div class="media-with-copy__media">
+      {%- if section.settings.video_url != blank -%}
+        <video
+          src="{{ section.settings.video_url }}"
+          autoplay loop muted playsinline
+          class="media-with-copy__video"
+          width="600" height="600"
+        ></video>
       {%- elsif section.settings.image != blank -%}
-        <img src="{{ section.settings.image | image_url: width: 800 }}"
-             alt="{{ section.settings.heading | escape }}"
-             width="800" height="600" loading="lazy">
-      {%- else -%}
-        <div style="aspect-ratio:4/3;background:#f3f4f6;border-radius:16px;"></div>
+        <img
+          src="{{ section.settings.image | image_url: width: 700 }}"
+          alt="{{ section.settings.image.alt | escape }}"
+          width="700" height="700"
+          loading="lazy"
+          class="media-with-copy__img"
+        >
       {%- endif -%}
     </div>
 
-    <div class="mwc-copy">
-      {%- if section.settings.tag != blank -%}
-        <p class="mwc-copy__tag">{{ section.settings.tag }}</p>
+    <div class="media-with-copy__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="media-with-copy__eyebrow">{{ section.settings.eyebrow }}</p>
       {%- endif -%}
       {%- if section.settings.heading != blank -%}
-        <h2 class="mwc-copy__heading">{{ section.settings.heading }}</h2>
+        <h2 class="media-with-copy__heading">{{ section.settings.heading }}</h2>
       {%- endif -%}
       {%- if section.settings.body != blank -%}
-        <div class="mwc-copy__body">{{ section.settings.body }}</div>
+        <div class="media-with-copy__body rte">{{ section.settings.body }}</div>
       {%- endif -%}
-
-      {%- assign has_steps = false -%}
-      {%- for block in section.blocks -%}
-        {%- if block.type == 'step' -%}{%- assign has_steps = true -%}{%- endif -%}
-      {%- endfor -%}
-
-      {%- if has_steps -%}
-        <ol class="mwc-steps">
-          {%- assign step_num = 0 -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'step' -%}
-              {%- assign step_num = step_num | plus: 1 -%}
-              <li class="mwc-step" {{ block.shopify_attributes }}>
-                <span class="mwc-step__num">{{ step_num }}</span>
-                <span class="mwc-step__text">{{ block.settings.text }}</span>
-              </li>
-            {%- endif -%}
-          {%- endfor -%}
-        </ol>
-      {%- endif -%}
+      <ul class="media-with-copy__steps">
+        {%- for block in section.blocks -%}
+          <li class="media-with-copy__step" {{ block.shopify_attributes }}>
+            <span class="step-num">{{ forloop.index }}</span>
+            <div>
+              <strong>{{ block.settings.title }}</strong>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
     </div>
+
   </div>
 </section>
 
+<style>
+  .media-with-copy__inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .media-with-copy__inner--right .media-with-copy__media { order: 2; }
+  .media-with-copy__inner--right .media-with-copy__content { order: 1; }
+  .media-with-copy__img, .media-with-copy__video { width: 100%; border-radius: 12px; }
+  .media-with-copy__eyebrow { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 0.5rem; }
+  .media-with-copy__heading { font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 800; margin-bottom: 1rem; }
+  .media-with-copy__body { margin-bottom: 1.25rem; opacity: 0.75; }
+  .media-with-copy__steps { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem; }
+  .media-with-copy__step { display: flex; gap: 1rem; align-items: flex-start; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; background: currentColor; color: var(--color-bg, #fff); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; flex-shrink: 0; }
+  .media-with-copy__step strong { display: block; font-weight: 700; margin-bottom: 0.2rem; }
+  .media-with-copy__step p { margin: 0; font-size: 0.9rem; opacity: 0.7; }
+  @media (max-width: 768px) { .media-with-copy__inner { grid-template-columns: 1fr; } .media-with-copy__inner--right .media-with-copy__media { order: 0; } }
+</style>
+
 {% schema %}
 {
-  "name": "Media con Copy",
+  "name": "Media + Copy",
+  "tag": "section",
   "settings": [
-    { "type": "image_picker", "id": "image", "label": "Imagen" },
-    { "type": "url", "id": "video", "label": "URL vídeo (opcional, sobreescribe imagen)" },
-    { "type": "text", "id": "tag", "label": "Tag superior", "default": "Cómo funciona" },
-    { "type": "text", "id": "heading", "label": "Título", "default": "" },
+    { "type": "select", "id": "image_position", "label": "Posición de la imagen", "options": [ { "value": "left", "label": "Izquierda" }, { "value": "right", "label": "Derecha" } ], "default": "left" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Así funciona" },
     { "type": "richtext", "id": "body", "label": "Cuerpo de texto" },
-    {
-      "type": "select", "id": "layout", "label": "Posición imagen",
-      "options": [
-        { "value": "image_left", "label": "Imagen a la izquierda" },
-        { "value": "image_right", "label": "Imagen a la derecha" }
-      ],
-      "default": "image_left"
-    }
+    { "type": "image_picker", "id": "image", "label": "Imagen" },
+    { "type": "text", "id": "video_url", "label": "URL de vídeo (mp4) — tiene prioridad sobre imagen" }
   ],
   "blocks": [
     {
       "type": "step",
       "name": "Paso",
       "settings": [
-        { "type": "text", "id": "text", "label": "Texto del paso", "default": "" }
+        { "type": "text", "id": "title", "label": "Título del paso", "default": "Paso" },
+        { "type": "textarea", "id": "text", "label": "Descripción", "default": "Descripción del paso." }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Media con Copy",
+      "name": "Media + Copy",
       "blocks": [
-        { "type": "step", "settings": { "text": "Abre el bowl y colócalo en el suelo" } },
-        { "type": "step", "settings": { "text": "Llena con agua o comida directamente" } },
-        { "type": "step", "settings": { "text": "Recoge, pliega y guarda en el bolsillo" } }
+        { "type": "step", "settings": { "title": "Aplica", "text": "Solo necesitas 2 minutos al día." } },
+        { "type": "step", "settings": { "title": "Activa", "text": "La tecnología hace el trabajo por ti." } },
+        { "type": "step", "settings": { "title": "Resultado", "text": "Visible en 2-4 semanas con uso constante." } }
       ]
     }
   ]

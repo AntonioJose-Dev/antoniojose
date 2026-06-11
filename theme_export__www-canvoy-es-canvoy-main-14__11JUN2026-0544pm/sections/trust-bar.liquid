@@ -1,69 +1,53 @@
-<style>
-.trust-bar {
-  background: #111827;
-  padding: 14px 24px;
-}
-.trust-bar__inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 32px;
-  flex-wrap: wrap;
-}
-.trust-bar__item {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #F9FAFB;
-  white-space: nowrap;
-}
-.trust-bar__icon { font-size: 15px; }
-@media(max-width:580px){
-  .trust-bar__inner { gap: 16px; }
-  .trust-bar__item { font-size: 11px; }
-}
-</style>
-
-<div class="trust-bar" id="trust-bar-{{ section.id }}">
-  <div class="trust-bar__inner">
+<section class="section trust-bar" style="background: {{ section.settings.bg_color }};">
+  <div class="wrap trust-bar__inner">
     {%- for block in section.blocks -%}
-      {%- if block.type == 'item' -%}
-        <div class="trust-bar__item" {{ block.shopify_attributes }}>
-          {%- if block.settings.icon != blank -%}
-            <span class="trust-bar__icon">{{ block.settings.icon }}</span>
+      <div class="trust-bar__item" {{ block.shopify_attributes }}>
+        <span class="trust-bar__icon" aria-hidden="true">{{ block.settings.icon }}</span>
+        <div>
+          <p class="trust-bar__title">{{ block.settings.title }}</p>
+          {%- if block.settings.subtitle != blank -%}
+            <p class="trust-bar__subtitle">{{ block.settings.subtitle }}</p>
           {%- endif -%}
-          <span>{{ block.settings.text }}</span>
         </div>
-      {%- endif -%}
+      </div>
     {%- endfor -%}
   </div>
-</div>
+</section>
+
+<style>
+  .trust-bar__inner { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem 3rem; padding: 1.25rem 0; }
+  .trust-bar__item { display: flex; align-items: center; gap: 0.6rem; }
+  .trust-bar__icon { font-size: 1.4rem; }
+  .trust-bar__title { font-size: 0.9rem; font-weight: 700; margin: 0; }
+  .trust-bar__subtitle { font-size: 0.78rem; opacity: 0.6; margin: 0; }
+</style>
 
 {% schema %}
 {
-  "name": "Trust Bar",
+  "name": "Trust bar",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "bg_color", "label": "Fondo", "default": "#f5f5f5" }
+  ],
   "blocks": [
     {
       "type": "item",
-      "name": "Item de confianza",
+      "name": "Badge de confianza",
       "settings": [
-        { "type": "text", "id": "icon", "label": "Emoji / icono", "default": "🚚" },
-        { "type": "text", "id": "text", "label": "Texto", "default": "" }
+        { "type": "text", "id": "icon", "label": "Icono emoji", "default": "🚚" },
+        { "type": "text", "id": "title", "label": "Título", "default": "Envío gratis" },
+        { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "En pedidos +30€" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Trust Bar",
+      "name": "Trust bar",
       "blocks": [
-        { "type": "item", "settings": { "icon": "🚚", "text": "Envío gratis +50€" } },
-        { "type": "item", "settings": { "icon": "🔒", "text": "Pago 100% seguro" } },
-        { "type": "item", "settings": { "icon": "↺", "text": "30 días de devolución" } },
-        { "type": "item", "settings": { "icon": "⭐", "text": "4.9 · +500 reseñas" } }
+        { "type": "item", "settings": { "icon": "🚚", "title": "Envío gratis", "subtitle": "En pedidos +30€" } },
+        { "type": "item", "settings": { "icon": "🔄", "title": "30 días para devolver", "subtitle": "Sin preguntas" } },
+        { "type": "item", "settings": { "icon": "🔒", "title": "Pago seguro", "subtitle": "SSL + Stripe" } },
+        { "type": "item", "settings": { "icon": "⭐", "title": "+2.000 reseñas", "subtitle": "Media 4.8 / 5" } }
       ]
     }
   ]
