@@ -1,0 +1,65 @@
+{%- comment -%}
+  pdp-benefits.liquid
+  Sección: Beneficios con iconos
+  Estructura: heading centrado + grid de cards (icono emoji + título + descripción)
+{%- endcomment -%}
+
+{{ 'pdp-content.css' | asset_url | stylesheet_tag }}
+
+<section class="pdp-sec pdp-benefits" id="pdp-benefits">
+  <div class="pdp-sec__inner">
+
+    {%- if section.settings.heading != blank -%}
+      <div class="pdp-sec__header">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="pdp-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        <h2 class="pdp-sec__title">{{ section.settings.heading }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="pdp-sec__sub">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="pdp-benefits__grid" style="--cols: {{ section.settings.columns }}">
+        {%- for block in section.blocks -%}
+          <div class="pdp-benefit-card" {{ block.shopify_attributes }}>
+            {%- if block.settings.icon != blank -%}
+              <div class="pdp-benefit-card__icon">{{ block.settings.icon }}</div>
+            {%- endif -%}
+            <h3 class="pdp-benefit-card__title">{{ block.settings.title }}</h3>
+            {%- if block.settings.text != blank -%}
+              <p class="pdp-benefit-card__text">{{ block.settings.text }}</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PDP Beneficios",
+  "settings": [
+    { "type": "text",    "id": "eyebrow",     "label": "Eyebrow",      "default": "¿Por qué elegir Canvoy?" },
+    { "type": "text",    "id": "heading",     "label": "Título",       "default": "Todo lo que necesita tu mascota, resuelto." },
+    { "type": "textarea","id": "subheading",  "label": "Subtítulo",    "default": "Diseñado para que no tengas que pensar en logística — solo en disfrutar a tu perro." },
+    { "type": "range",   "id": "columns",     "label": "Columnas",     "min": 2, "max": 4, "step": 1, "default": 3 }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Beneficio",
+      "settings": [
+        { "type": "text", "id": "icon",  "label": "Emoji / icono", "default": "🐾" },
+        { "type": "text", "id": "title", "label": "Título",        "default": "Hidratación garantizada" },
+        { "type": "textarea", "id": "text", "label": "Descripción", "default": "Agua siempre fresca y disponible, sin que tengas que estar pendiente." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "PDP Beneficios" }]
+}
+{% endschema %}

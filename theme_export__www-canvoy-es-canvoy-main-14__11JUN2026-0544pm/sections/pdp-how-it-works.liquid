@@ -1,0 +1,77 @@
+{%- comment -%}
+  pdp-how-it-works.liquid
+  Sección: Cómo funciona
+  Estructura: heading + pasos numerados (imagen opcional + número + título + texto)
+{%- endcomment -%}
+
+{{ 'pdp-content.css' | asset_url | stylesheet_tag }}
+
+<section class="pdp-sec pdp-hiw" id="pdp-how-it-works">
+  <div class="pdp-sec__inner">
+
+    {%- if section.settings.heading != blank -%}
+      <div class="pdp-sec__header">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="pdp-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        <h2 class="pdp-sec__title">{{ section.settings.heading }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="pdp-sec__sub">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ol class="pdp-hiw__steps">
+        {%- for block in section.blocks -%}
+          <li class="pdp-hiw__step" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              <div class="pdp-hiw__img-wrap">
+                <img
+                  src="{{ block.settings.image | image_url: width: 480 }}"
+                  alt="{{ block.settings.title | escape }}"
+                  loading="lazy"
+                  width="480"
+                  height="480"
+                >
+              </div>
+            {%- else -%}
+              <div class="pdp-hiw__num" aria-hidden="true">{{ forloop.index }}</div>
+            {%- endif -%}
+            <div class="pdp-hiw__body">
+              <span class="pdp-hiw__step-num">Paso {{ forloop.index }}</span>
+              <h3 class="pdp-hiw__step-title">{{ block.settings.title }}</h3>
+              {%- if block.settings.text != blank -%}
+                <p class="pdp-hiw__step-text">{{ block.settings.text }}</p>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ol>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PDP Cómo funciona",
+  "settings": [
+    { "type": "text",    "id": "eyebrow",    "label": "Eyebrow",   "default": "Así de sencillo" },
+    { "type": "text",    "id": "heading",    "label": "Título",    "default": "En 3 pasos, listo." },
+    { "type": "textarea","id": "subheading", "label": "Subtítulo", "default": "" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Paso",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Imagen del paso (opcional)" },
+        { "type": "text",     "id": "title", "label": "Título", "default": "Abre el pack" },
+        { "type": "textarea","id": "text",  "label": "Descripción", "default": "Recibe el pedido en casa en 3–5 días hábiles." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "PDP Cómo funciona" }]
+}
+{% endschema %}

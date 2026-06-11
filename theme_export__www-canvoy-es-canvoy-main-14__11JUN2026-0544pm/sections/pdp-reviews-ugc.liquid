@@ -1,0 +1,114 @@
+{%- comment -%}
+  pdp-reviews-ugc.liquid
+  Sección: Reseñas UGC
+  Estructura: heading + rating global + grid de cards de reseña
+{%- endcomment -%}
+
+{{ 'pdp-content.css' | asset_url | stylesheet_tag }}
+
+<section class="pdp-sec pdp-reviews" id="pdp-reviews">
+  <div class="pdp-sec__inner">
+
+    <div class="pdp-sec__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="pdp-eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h2 class="pdp-sec__title">{{ section.settings.heading }}</h2>
+      {%- if section.settings.global_rating != blank -%}
+        <div class="pdp-reviews__global">
+          <span class="pdp-reviews__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="pdp-reviews__score">{{ section.settings.global_rating }}</span>
+          {%- if section.settings.review_count != blank -%}
+            <span class="pdp-reviews__count">{{ section.settings.review_count }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="pdp-reviews__grid">
+        {%- for block in section.blocks -%}
+          <article class="pdp-review-card" {{ block.shopify_attributes }}>
+
+            <header class="pdp-review-card__header">
+              {%- if block.settings.photo != blank -%}
+                <img
+                  src="{{ block.settings.photo | image_url: width: 80 }}"
+                  alt="{{ block.settings.author | escape }}"
+                  class="pdp-review-card__avatar"
+                  loading="lazy"
+                  width="40"
+                  height="40"
+                >
+              {%- else -%}
+                <div class="pdp-review-card__avatar-placeholder">{{ block.settings.author | slice: 0 | upcase }}</div>
+              {%- endif -%}
+              <div class="pdp-review-card__meta">
+                <strong class="pdp-review-card__author">{{ block.settings.author }}</strong>
+                {%- if block.settings.verified -%}
+                  <span class="pdp-review-card__verified">&#10003; Verificado</span>
+                {%- endif -%}
+              </div>
+              <div class="pdp-review-card__stars" aria-label="{{ block.settings.stars }} estrellas">
+                {%- assign star_count = block.settings.stars | default: 5 -%}
+                {%- for i in (1..star_count) -%}&#9733;{%- endfor -%}
+              </div>
+            </header>
+
+            {%- if block.settings.title != blank -%}
+              <h4 class="pdp-review-card__title">{{ block.settings.title }}</h4>
+            {%- endif -%}
+
+            <p class="pdp-review-card__body">{{ block.settings.body }}</p>
+
+            {%- if block.settings.ugc_photo != blank -%}
+              <img
+                src="{{ block.settings.ugc_photo | image_url: width: 400 }}"
+                alt="Foto de {{ block.settings.author | escape }}"
+                class="pdp-review-card__ugc-img"
+                loading="lazy"
+                width="400"
+                height="300"
+              >
+            {%- endif -%}
+
+            {%- if block.settings.date != blank -%}
+              <time class="pdp-review-card__date">{{ block.settings.date }}</time>
+            {%- endif -%}
+
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "PDP Reseñas UGC",
+  "settings": [
+    { "type": "text",    "id": "eyebrow",       "label": "Eyebrow",         "default": "Lo que dicen los clientes" },
+    { "type": "text",    "id": "heading",       "label": "Título",           "default": "Miles de mascotas felices" },
+    { "type": "text",    "id": "global_rating", "label": "Puntuación global","default": "4.9 / 5" },
+    { "type": "text",    "id": "review_count",  "label": "Nº de reseñas",    "default": "(127 reseñas)" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Reseña",
+      "settings": [
+        { "type": "image_picker","id": "photo",     "label": "Avatar del autor (opcional)" },
+        { "type": "text",       "id": "author",    "label": "Nombre",       "default": "María G." },
+        { "type": "checkbox",   "id": "verified",  "label": "Compra verificada", "default": true },
+        { "type": "range",      "id": "stars",     "label": "Estrellas",    "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text",       "id": "title",     "label": "Título reseña", "default": "¡Mi perro lo adora!" },
+        { "type": "textarea",   "id": "body",      "label": "Texto",         "default": "Desde que lo uso, mi perro siempre tiene agua fresca sin que yo tenga que preocuparme. Súper recomendable." },
+        { "type": "image_picker","id": "ugc_photo","label": "Foto UGC (opcional)" },
+        { "type": "text",       "id": "date",      "label": "Fecha",         "default": "mayo 2025" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "PDP Reseñas UGC" }]
+}
+{% endschema %}
