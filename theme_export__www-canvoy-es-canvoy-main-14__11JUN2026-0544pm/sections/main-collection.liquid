@@ -1,0 +1,105 @@
+{% paginate collection.products by section.settings.products_per_page %}
+
+<div class="collection-page">
+  <div class="wrap">
+
+    {%- if section.settings.show_header -%}
+      <div class="collection-page__header">
+        <h1 class="collection-page__title">{{ collection.title }}</h1>
+        {%- if collection.description != blank -%}
+          <p class="collection-page__desc">{{ collection.description }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="collection-toolbar">
+      <p class="collection-count">{{ paginate.items }} producto{% if paginate.items != 1 %}s{% endif %}</p>
+      {%- if section.settings.show_sort -%}
+        <div class="collection-sort">
+          <label for="sort-by" class="visually-hidden">Ordenar por</label>
+          <select id="sort-by" class="sort-select" onchange="window.location.href='{{ collection.url }}?sort_by=' + this.value">
+            <option value="manual"{% if collection.sort_by == 'manual' %} selected{% endif %}>Destacados</option>
+            <option value="best-selling"{% if collection.sort_by == 'best-selling' %} selected{% endif %}>Más vendidos</option>
+            <option value="price-ascending"{% if collection.sort_by == 'price-ascending' %} selected{% endif %}>Precio: menor a mayor</option>
+            <option value="price-descending"{% if collection.sort_by == 'price-descending' %} selected{% endif %}>Precio: mayor a menor</option>
+            <option value="created-descending"{% if collection.sort_by == 'created-descending' %} selected{% endif %}>Más recientes</option>
+          </select>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if collection.products.size > 0 -%}
+      <div class="products-grid products-grid--{{ section.settings.columns }}">
+        {%- for product in collection.products -%}
+          {%- render 'product-card', card_product: product -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <div class="pagination">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="pagination__btn">← Anterior</a>
+          {%- endif -%}
+          <span class="pagination__info">Página {{ paginate.current_page }} de {{ paginate.pages }}</span>
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="pagination__btn">Siguiente →</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="collection-empty">
+        <p>No hay productos en esta colección todavía.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--outline">Ver todo</a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% endpaginate %}
+
+{% schema %}
+{
+  "name": "Colección principal",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_header",
+      "label": "Mostrar título y descripción",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort",
+      "label": "Mostrar selector de orden",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Productos por página",
+      "min": 6,
+      "max": 48,
+      "step": 6,
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columnas",
+      "options": [
+        { "value": "2", "label": "2 columnas" },
+        { "value": "3", "label": "3 columnas" },
+        { "value": "4", "label": "4 columnas" }
+      ],
+      "default": "3"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Colección principal"
+    }
+  ]
+}
+{% endschema %}

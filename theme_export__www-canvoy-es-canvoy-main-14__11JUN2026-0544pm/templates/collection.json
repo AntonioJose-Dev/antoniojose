@@ -1,17 +1,14 @@
 {
   "sections": {
-    "collection-header": {
-      "type": "collection-header",
-      "settings": {}
-    },
     "main-collection": {
-      "type": "main-collection-product-grid",
+      "type": "main-collection",
       "settings": {
-        "products_per_page": 16,
-        "columns_desktop": 4,
-        "columns_mobile": 2
+        "show_header": true,
+        "show_sort": true,
+        "products_per_page": 12,
+        "columns": "3"
       }
     }
   },
-  "order": ["collection-header", "main-collection"]
+  "order": ["main-collection"]
 }

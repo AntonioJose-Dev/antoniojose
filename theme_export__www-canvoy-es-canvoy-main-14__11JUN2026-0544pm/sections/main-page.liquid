@@ -1,0 +1,19 @@
+<div class="page-content wrap">
+  <h1 class="page-title">{{ page.title }}</h1>
+  <div class="page-body rte">
+    {{ page.content }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contenido de página",
+  "tag": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Contenido de página"
+    }
+  ]
+}
+{% endschema %}

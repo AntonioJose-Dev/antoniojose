@@ -2,63 +2,28 @@
   "sections": {
     "lp-hero": {
       "type": "lp-hero-product",
-      "settings": {
-        "tag": "",
-        "heading": "",
-        "subheading": "",
-        "cta_text": "Añadir al carrito",
-        "show_rating": true,
-        "rating_text": "4.9 · +500 clientes satisfechos"
-      }
+      "settings": {}
     },
-    "trust": {
+    "lp-benefits": {
+      "type": "product-benefits-grid",
+      "settings": {}
+    },
+    "lp-trust": {
       "type": "trust-bar",
       "settings": {}
     },
-    "benefits": {
-      "type": "product-benefits-grid",
-      "settings": {
-        "heading": "Por qué elegirlo"
-      }
-    },
-    "how-it-works": {
+    "lp-how-it-works": {
       "type": "media-with-copy",
-      "settings": {
-        "tag": "Cómo funciona",
-        "heading": "Simple, rápido, efectivo",
-        "layout": "image_left"
-      }
+      "settings": {}
     },
-    "comparison": {
-      "type": "comparison-table",
-      "settings": {
-        "heading": "¿Por qué nosotros?",
-        "col_ours": "Canvoy",
-        "col_others": "Alternativas"
-      }
-    },
-    "reviews": {
+    "lp-reviews": {
       "type": "ugc-reviews",
-      "settings": {
-        "heading": "Lo que dicen nuestros clientes",
-        "rating_global": "4.9",
-        "review_count": "127 reseñas verificadas"
-      }
+      "settings": {}
     },
-    "faq": {
+    "lp-faq": {
       "type": "faq-accordion",
-      "settings": {
-        "heading": "Preguntas frecuentes"
-      }
-    },
-    "final-cta": {
-      "type": "lp-hero-product",
-      "settings": {
-        "heading": "¿Listo para probarlo?",
-        "cta_text": "Quiero el mío ahora",
-        "show_rating": false
-      }
+      "settings": {}
     }
   },
-  "order": ["lp-hero", "trust", "benefits", "how-it-works", "comparison", "reviews", "faq", "final-cta"]
+  "order": ["lp-hero", "lp-benefits", "lp-trust", "lp-how-it-works", "lp-reviews", "lp-faq"]
 }
