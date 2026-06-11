@@ -1,0 +1,97 @@
+<style>
+.faq-section {
+  padding: 56px 24px;
+  background: #fff;
+}
+.faq-section__inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.faq-section__heading {
+  font-size: clamp(22px,3vw,32px);
+  font-weight: 800;
+  color: #111827;
+  text-align: center;
+  margin: 0 0 32px;
+}
+.faq-item {
+  border-bottom: 1px solid #F3F4F6;
+}
+.faq-item summary {
+  padding: 16px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+";
+  font-size: 20px;
+  font-weight: 400;
+  color: #9CA3AF;
+  flex-shrink: 0;
+  transition: transform .2s;
+}
+.faq-item[open] summary::after {
+  content: "−";
+}
+.faq-item__body {
+  font-size: 14px;
+  color: #4B5563;
+  line-height: 1.7;
+  padding-bottom: 16px;
+}
+</style>
+
+<section class="faq-section" id="faq-{{ section.id }}">
+  <div class="faq-section__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="faq-section__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'item' -%}
+        <details class="faq-item" {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.question }}</summary>
+          <div class="faq-item__body">{{ block.settings.answer }}</div>
+        </details>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FAQ Acordeón",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Título", "default": "Preguntas frecuentes" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Pregunta",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Pregunta", "default": "" },
+        { "type": "textarea", "id": "answer", "label": "Respuesta", "default": "" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Acordeón",
+      "blocks": [
+        { "type": "item", "settings": { "question": "¿Cuándo llegará mi pedido?", "answer": "Enviamos en 24-48h laborables. Recibes email de confirmación y número de seguimiento." } },
+        { "type": "item", "settings": { "question": "¿Puedo devolver el producto?", "answer": "Sí. Tienes 30 días desde la recepción. Solo contáctanos y gestionamos el reembolso en 48h." } },
+        { "type": "item", "settings": { "question": "¿Está fabricado con materiales seguros?", "answer": "Sí. Acero inoxidable 304, libre de BPA y apto para contacto alimentario." } },
+        { "type": "item", "settings": { "question": "¿Funciona para cualquier tamaño de perro?", "answer": "Sí. El diseño se adapta tanto a razas pequeñas como grandes." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

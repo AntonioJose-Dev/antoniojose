@@ -1,0 +1,119 @@
+{%- assign show_rating = section.settings.show_rating -%}
+
+<style>
+.lp-hero {
+  background: var(--lp-hero-bg, #fff);
+  padding: 48px 24px 40px;
+}
+.lp-hero__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+@media(max-width:749px){
+  .lp-hero__inner { grid-template-columns:1fr; gap:24px; padding-bottom:90px; }
+}
+.lp-hero__media img {
+  width: 100%; border-radius: 16px; object-fit: cover;
+  aspect-ratio: 1/1;
+}
+.lp-hero__tag {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: #FF5A1F; margin-bottom: 8px;
+}
+.lp-hero__heading {
+  font-size: clamp(24px,4vw,42px); font-weight: 800;
+  line-height: 1.15; color: #111827; margin: 0 0 12px;
+}
+.lp-hero__sub {
+  font-size: 15px; color: #4B5563; line-height: 1.6; margin: 0 0 16px;
+}
+.lp-hero__rating {
+  font-size: 13px; color: #374151;
+  display: flex; align-items: center; gap: 6px; margin-bottom: 16px;
+}
+.lp-hero__stars { color: #F59E0B; }
+.lp-hero__cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 100%; max-width: 380px;
+  height: 54px; background: #FF5A1F; color: #fff;
+  border: none; border-radius: 10px; font-size: 17px; font-weight: 700;
+  cursor: pointer; letter-spacing: .01em;
+  transition: background .15s, transform .1s;
+  text-decoration: none;
+}
+.lp-hero__cta:hover { background: #E54D1B; }
+.lp-hero__cta:active { transform: scale(.98); }
+.lp-hero__trust {
+  display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px;
+}
+.lp-hero__trust-item {
+  font-size: 11px; color: #6B7280;
+  display: flex; align-items: center; gap: 4px;
+}
+</style>
+
+<section class="lp-hero" id="lp-hero-{{ section.id }}">
+  <div class="lp-hero__inner">
+
+    <div class="lp-hero__media">
+      {%- if section.settings.image != blank -%}
+        <img src="{{ section.settings.image | image_url: width: 900 }}"
+             alt="{{ section.settings.heading | escape }}"
+             width="900" height="900" loading="eager">
+      {%- elsif product.featured_image -%}
+        <img src="{{ product.featured_image | image_url: width: 900 }}"
+             alt="{{ product.title | escape }}"
+             width="900" height="900" loading="eager">
+      {%- else -%}
+        <div style="aspect-ratio:1/1;background:#f3f4f6;border-radius:16px;"></div>
+      {%- endif -%}
+    </div>
+
+    <div class="lp-hero__copy">
+      {%- if section.settings.tag != blank -%}
+        <p class="lp-hero__tag">{{ section.settings.tag }}</p>
+      {%- endif -%}
+
+      <h1 class="lp-hero__heading">{{ section.settings.heading | default: product.title }}</h1>
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="lp-hero__sub">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+
+      {%- if show_rating and section.settings.rating_text != blank -%}
+        <div class="lp-hero__rating">
+          <span class="lp-hero__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span>{{ section.settings.rating_text }}</span>
+        </div>
+      {%- endif -%}
+
+      <a href="#pdp-atc" class="lp-hero__cta">{{ section.settings.cta_text | default: 'Añadir al carrito' }}</a>
+
+      <div class="lp-hero__trust">
+        <span class="lp-hero__trust-item">&#128666; Envío España</span>
+        <span class="lp-hero__trust-item">&#128274; Pago seguro</span>
+        <span class="lp-hero__trust-item">&#128737; 30 días garantía</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "LP Hero Producto",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Imagen hero (opcional, usa imagen del producto si se deja vacío)" },
+    { "type": "text", "id": "tag", "label": "Tag superior", "default": "" },
+    { "type": "text", "id": "heading", "label": "Título principal", "default": "" },
+    { "type": "textarea", "id": "subheading", "label": "Subtítulo", "default": "" },
+    { "type": "checkbox", "id": "show_rating", "label": "Mostrar rating", "default": true },
+    { "type": "text", "id": "rating_text", "label": "Texto rating", "default": "4.9 · +500 clientes satisfechos" },
+    { "type": "text", "id": "cta_text", "label": "Texto del CTA", "default": "Añadir al carrito" }
+  ],
+  "presets": [{ "name": "LP Hero Producto" }]
+}
+{% endschema %}
