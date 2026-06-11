@@ -1,0 +1,470 @@
+{%- if product -%}
+{%- assign cv = product.selected_or_first_available_variant | default: product.variants.first -%}
+{%- assign img = product.featured_image | default: nil -%}
+
+<style>
+/* ================================================
+   PDP BUYBOX - CANVOY
+   Responsive real, optimizado para Shopify
+   ================================================ */
+
+.pdp-buybox {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #111827;
+  background: #fff;
+}
+
+/* GRID PRINCIPAL */
+.pdp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+/* Mobile: 1 columna, compacto */
+@media screen and (max-width: 749px) {
+  .pdp-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 20px 16px;
+  }
+}
+
+/* ================================================
+   GALERÍA
+   ================================================ */
+
+.pdp-gallery {
+  position: sticky;
+  top: 24px;
+}
+
+@media screen and (max-width: 749px) {
+  .pdp-gallery {
+    position: static;
+  }
+}
+
+.pdp-main {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f5f5f5;
+  aspect-ratio: 1 / 1;
+}
+
+.pdp-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pdp-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #FF5A1F;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+/* Miniaturas */
+.pdp-thumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+@media screen and (max-width: 749px) {
+  .pdp-thumbs {
+    display: none;
+  }
+}
+
+.pdp-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  background: none;
+  transition: border-color 0.15s;
+}
+
+.pdp-thumb.active,
+.pdp-thumb:hover {
+  border-color: #FF5A1F;
+}
+
+.pdp-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ================================================
+   INFO (BUY BOX)
+   ================================================ */
+
+.pdp-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pdp-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #FF5A1F;
+}
+
+.pdp-title {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #111827;
+  margin: 0;
+}
+
+@media screen and (max-width: 749px) {
+  .pdp-title {
+    font-size: 22px;
+  }
+}
+
+.pdp-sub {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #4B5563;
+  margin: 0;
+}
+
+@media screen and (max-width: 749px) {
+  .pdp-sub {
+    font-size: 13px;
+  }
+}
+
+/* Rating */
+.pdp-rating {
+  font-size: 13px;
+  color: #374151;
+}
+
+.pdp-stars {
+  color: #F59E0B;
+  letter-spacing: -1px;
+}
+
+/* Precio */
+.pdp-price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pdp-price__cur {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+}
+
+@media screen and (max-width: 749px) {
+  .pdp-price__cur {
+    font-size: 24px;
+  }
+}
+
+.pdp-price__old {
+  font-size: 16px;
+  color: #9CA3AF;
+  text-decoration: line-through;
+}
+
+.pdp-price__save {
+  background: #DCFCE7;
+  color: #16A34A;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 20px;
+}
+
+/* ================================================
+   VARIANTES
+   ================================================ */
+
+.pdp-variants {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pdp-var-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.pdp-var-opts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pdp-var-btn {
+  padding: 8px 16px;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.pdp-var-btn:hover {
+  border-color: #D1D5DB;
+}
+
+.pdp-var-btn.active {
+  border-color: #FF5A1F;
+  background: #FFF0EB;
+  color: #FF5A1F;
+  font-weight: 600;
+}
+
+/* ================================================
+   BULLETS
+   ================================================ */
+
+.pdp-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pdp-bullet {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #374151;
+}
+
+.pdp-bullet::before {
+  content: "✓";
+  color: #FF5A1F;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* ================================================
+   CTA
+   ================================================ */
+
+.pdp-cta {
+  width: 100%;
+  height: 48px;
+  background: #FF5A1F;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 4px;
+}
+
+.pdp-cta:hover {
+  background: #E54D1B;
+}
+
+.pdp-cta:disabled {
+  background: #D1D5DB;
+  cursor: not-allowed;
+}
+
+/* ================================================
+   TRUST BADGES
+   ================================================ */
+
+.pdp-trust {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+@media screen and (max-width: 749px) {
+  .pdp-trust {
+    gap: 12px;
+  }
+}
+
+.pdp-trust-item {
+  font-size: 11px;
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+</style>
+
+<section class="pdp-buybox">
+<div class="pdp-grid">
+
+<!-- LEFT: Gallery -->
+<div class="pdp-gallery">
+  <div class="pdp-main">
+    {%- if img -%}
+      <img src="{{ img | image_url: width: 800 }}" alt="{{ product.title }}" id="pdp-main-img">
+    {%- else -%}
+      <div style="width:100%;aspect-ratio:1;background:#eee;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:13px">Tu imagen aquí</div>
+    {%- endif -%}
+    {%- if cv.compare_at_price > cv.price -%}
+      <span class="pdp-badge">Ahorra {{ cv.compare_at_price | minus: cv.price | money }}</span>
+    {%- endif -%}
+  </div>
+  {%- if product.media.size > 1 -%}
+    <div class="pdp-thumbs">
+      {%- for media in product.media limit: 4 -%}
+        <button class="pdp-thumb{% if forloop.first %} active{% endif %}" data-src="{{ media | image_url: width: 800 }}">
+          <img src="{{ media | image_url: width: 100 }}" alt="">
+        </button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+<!-- RIGHT: Buy Box -->
+<div class="pdp-info">
+  <span class="pdp-label">Botella Portátil Perros</span>
+  
+  <h1 class="pdp-title">{{ product.title }}</h1>
+  
+  <p class="pdp-sub">Agua para tu perro en cada paseo, sin derrames ni cuencos.</p>
+
+  <div class="pdp-rating">
+    <span class="pdp-stars">★★★★★</span> 4.9 (127 reseñas)
+  </div>
+
+  <div class="pdp-price">
+    <span class="pdp-price__cur">{{ cv.price | money }}</span>
+    {%- if cv.compare_at_price > cv.price -%}
+      <span class="pdp-price__old">{{ cv.compare_at_price | money }}</span>
+      <span class="pdp-price__save">-{{ cv.compare_at_price | minus: cv.price | times: 100 | divided_by: cv.compare_at_price | round }}%</span>
+    {%- endif -%}
+  </div>
+
+  <!-- Variantes -->
+  {%- unless product.has_only_default_variant -%}
+    <div class="pdp-variants">
+      {%- for option in product.options_with_values -%}
+        <div>
+          <span class="pdp-var-label">{{ option.name }}: {{ option.selected_value }}</span>
+          <div class="pdp-var-opts">
+            {%- for value in option.values -%}
+              <button class="pdp-var-btn{% if value == option.selected_value %} active{% endif %}">{{ value }}</button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endunless -%}
+
+  <!-- Bullets -->
+  <ul class="pdp-bullets">
+    <li class="pdp-bullet">Cuenco plegable integrado</li>
+    <li class="pdp-bullet">Gancho para mochila o correa</li>
+    <li class="pdp-bullet">Fácil de limpiar</li>
+  </ul>
+
+  <!-- CTA -->
+  <button class="pdp-cta" id="pdp-atc" data-id="{{ cv.id }}" {% unless cv.available %}disabled{% endunless %}>
+    {%- if cv.available -%}Añadir al carrito{%- else -%}Agotado{%- endif -%}
+  </button>
+
+  <!-- Trust -->
+  <div class="pdp-trust">
+    <span class="pdp-trust-item">🚚 Envío</span>
+    <span class="pdp-trust-item">🔒 Pago seguro</span>
+    <span class="pdp-trust-item">🛡️ Garantía</span>
+  </div>
+</div>
+
+</div>
+</section>
+
+<script>
+(function(){
+  // Thumbnails
+  document.querySelectorAll('.pdp-thumb').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.pdp-thumb').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var img = document.getElementById('pdp-main-img');
+      if(img && btn.dataset.src) img.src = btn.dataset.src;
+    });
+  });
+
+  // Add to cart
+  document.getElementById('pdp-atc')?.addEventListener('click', function(){
+    var btn = this;
+    btn.textContent = 'Añadiendo...';
+    btn.disabled = true;
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({id: parseInt(btn.dataset.id, 10), quantity: 1})
+    })
+    .then(function(){
+      btn.textContent = '✓ Añadido';
+      document.dispatchEvent(new CustomEvent('cart:updated'));
+    })
+    .catch(function(){
+      btn.textContent = 'Error';
+      btn.disabled = false;
+    })
+    .finally(function(){
+      setTimeout(function(){
+        btn.textContent = 'Añadir al carrito';
+        btn.disabled = false;
+      }, 2000);
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "PDP BuyBox",
+  "tag": "section",
+  "class": "pdp-buybox",
+  "settings": [],
+  "presets": [
+    {
+      "name": "PDP BuyBox"
+    }
+  ]
+}
+{% endschema %}
+{%- endif -%}

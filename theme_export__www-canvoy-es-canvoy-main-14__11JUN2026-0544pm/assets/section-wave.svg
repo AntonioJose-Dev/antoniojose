@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none" class="section-wave">
+  <defs>
+    <linearGradient id="waveTopGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0C0C14;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0C0C14;stop-opacity:0"/>
+    </linearGradient>
+    <linearGradient id="waveBotGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0C0C14;stop-opacity:0"/>
+      <stop offset="100%" style="stop-color:#0C0C14;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Wave shape -->
+  <path 
+    fill="url(#waveTopGrad)" 
+    d="M0,0 L0,40 Q120,20 240,40 T480,40 T720,40 T960,40 T1200,40 T1440,40 L1440,0 Z"
+    class="wave-path"
+  >
+    <animate attributeName="d" dur="10s" repeatCount="indefinite"
+      values="M0,0 L0,40 Q120,20 240,40 T480,40 T720,40 T960,40 T1200,40 T1440,40 L1440,0 Z;
+              M0,0 L0,40 Q120,60 240,40 T480,40 T720,40 T960,40 T1200,40 T1440,40 L1440,0 Z;
+              M0,0 L0,40 Q120,20 240,40 T480,40 T720,40 T960,40 T1200,40 T1440,40 L1440,0 Z"/>
+  </path>
+  
+  <!-- Accent line on wave -->
+  <path
+    fill="none"
+    stroke="#FF5A1F"
+    stroke-width="2"
+    stroke-opacity="0.6"
+    d="M0,40 Q120,20 240,40 T480,40 T720,40 T960,40 T1200,40 T1440,40"
+    class="wave-accent"
+  >
+    <animate attributeName="d" dur="10s" repeatCount="indefinite"
+      values="M0,40 Q120,20 240,40 T480,40 T720,40 T960,40 T1200,40 T1440,40;
+              M0,40 Q120,60 240,40 T480,40 T720,40 T960,40 T1200,40 T1440,40;
+              M0,40 Q120,20 240,40 T480,40 T720,40 T960,40 T1200,40 T1440,40"/>
+  </path>
+</svg>

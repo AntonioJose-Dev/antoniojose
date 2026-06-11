@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="animated-paw">
+  <defs>
+    <filter id="pawGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <radialGradient id="pawGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF5A1F;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#FF5A1F;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Main pad -->
+  <ellipse cx="50" cy="60" rx="22" ry="18" fill="url(#pawGrad)" filter="url(#pawGlow)" class="paw-part paw-main">
+    <animate attributeName="rx" dur="3s" repeatCount="indefinite" values="20;24;20"/>
+    <animate attributeName="ry" dur="3s" repeatCount="indefinite" values="16;20;16"/>
+  </ellipse>
+  
+  <!-- Toe beans -->
+  <ellipse cx="30" cy="32" rx="10" ry="12" fill="url(#pawGrad)" filter="url(#pawGlow)" class="paw-part paw-toe-1">
+    <animate attributeName="cy" dur="2.5s" repeatCount="indefinite" values="30;26;30"/>
+  </ellipse>
+  <ellipse cx="50" cy="22" rx="10" ry="12" fill="url(#pawGrad)" filter="url(#pawGlow)" class="paw-part paw-toe-2">
+    <animate attributeName="cy" dur="2.8s" repeatCount="indefinite" values="20;16;20"/>
+  </ellipse>
+  <ellipse cx="70" cy="32" rx="10" ry="12" fill="url(#pawGrad)" filter="url(#pawGlow)" class="paw-part paw-toe-3">
+    <animate attributeName="cy" dur="2.6s" repeatCount="indefinite" values="30;26;30"/>
+  </ellipse>
+  
+  <!-- Pulse ring -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#FF5A1F" stroke-width="0.5" opacity="0.2" class="paw-pulse">
+    <animate attributeName="r" dur="2s" repeatCount="indefinite" values="35;50;35"/>
+    <animate attributeName="opacity" dur="2s" repeatCount="indefinite" values="0.3;0;0.3"/>
+  </circle>
+</svg>
