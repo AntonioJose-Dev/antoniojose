@@ -1,0 +1,108 @@
+{%- comment -%}
+  product-variants.liquid — Fase 6A
+  Selector visual de variantes: swatches de color y pills de opción.
+
+  Convenciones de nombre de opción (case-insensitive):
+    Color / Color / Colour  → swatches circulares
+    Talla / Size / Tamaño   → pills
+    Sabor / Flavour / Flavor→ pills
+    Cualquier otra opción   → pills
+
+  Variables esperadas:
+    - product  (object)
+    - cv       (variant seleccionado)
+{%- endcomment -%}
+
+{%- unless product.has_only_default_variant -%}
+
+<div class="pdp-variants" data-variants='{{ product.variants | json | escape }}'>
+
+  {%- for option in product.options_with_values -%}
+    {%- assign opt_name_lower = option.name | downcase -%}
+    {%- assign is_color = false -%}
+    {%- if opt_name_lower == 'color'
+          or opt_name_lower == 'colour'
+          or opt_name_lower == 'color' -%}
+      {%- assign is_color = true -%}
+    {%- endif -%}
+
+    <div
+      class="pdp-option"
+      data-option-index="{{ forloop.index0 }}"
+    >
+      <div class="pdp-option__label">
+        <span class="pdp-option__name">{{ option.name }}</span>
+        <span class="pdp-option__selected" id="pdp-opt-val-{{ forloop.index0 }}">{{ option.selected_value }}</span>
+      </div>
+
+      <div class="pdp-option__values" role="group" aria-label="{{ option.name }}">
+        {%- for value in option.values -%}
+          {%- assign is_selected = false -%}
+          {%- if value == option.selected_value -%}
+            {%- assign is_selected = true -%}
+          {%- endif -%}
+
+          {%- comment -%} Comprobar si esta combinación tiene stock {%- endcomment -%}
+          {%- assign variant_available = false -%}
+          {%- for variant in product.variants -%}
+            {%- if forloop.parentloop.index0 == 0 -%}
+              {%- if variant.option1 == value and variant.available -%}{%- assign variant_available = true -%}{%- endif -%}
+            {%- elsif forloop.parentloop.index0 == 1 -%}
+              {%- if variant.option2 == value and variant.available -%}{%- assign variant_available = true -%}{%- endif -%}
+            {%- elsif forloop.parentloop.index0 == 2 -%}
+              {%- if variant.option3 == value and variant.available -%}{%- assign variant_available = true -%}{%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- if is_color -%}
+            {%- comment -%}
+              Swatch de color:
+              Busca metafield custom.color_hex en la variante.
+              Fallback: convierte el nombre a color CSS.
+            {%- endcomment -%}
+            {%- assign swatch_color = '' -%}
+            {%- for variant in product.variants -%}
+              {%- if variant.option1 == value or variant.option2 == value or variant.option3 == value -%}
+                {%- if variant.metafields.custom.color_hex != blank -%}
+                  {%- assign swatch_color = variant.metafields.custom.color_hex | strip -%}
+                {%- endif -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            <button
+              class="pdp-swatch{% if is_selected %} active{% endif %}{% unless variant_available %} sold-out{% endunless %}"
+              data-value="{{ value | escape }}"
+              data-option-index="{{ forloop.parentloop.index0 }}"
+              aria-label="{{ option.name }}: {{ value }}{% unless variant_available %} (agotado){% endunless %}"
+              aria-pressed="{% if is_selected %}true{% else %}false{% endif %}"
+              title="{{ value }}"
+              {% if swatch_color != '' %}
+                style="--swatch-bg: {{ swatch_color }}"
+              {% else %}
+                style="--swatch-bg: {{ value | handle | replace: '-', '' }}"
+              {% endif %}
+            ></button>
+
+          {%- else -%}
+
+            <button
+              class="pdp-pill{% if is_selected %} active{% endif %}{% unless variant_available %} sold-out{% endunless %}"
+              data-value="{{ value | escape }}"
+              data-option-index="{{ forloop.parentloop.index0 }}"
+              aria-label="{{ option.name }}: {{ value }}{% unless variant_available %} (agotado){% endunless %}"
+              aria-pressed="{% if is_selected %}true{% else %}false{% endif %}"
+            >{{ value }}</button>
+
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endfor -%}
+
+  {%- comment -%} Input oculto que guarda el variant ID seleccionado {%- endcomment -%}
+  <input type="hidden" id="pdp-variant-id" value="{{ cv.id }}">
+
+</div>
+
+{%- endunless -%}
