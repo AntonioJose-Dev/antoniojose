@@ -1,54 +1,42 @@
-{%- if product -%}
 {%- assign cv = product.selected_or_first_available_variant | default: product.variants.first -%}
 {%- assign img = product.featured_image | default: nil -%}
 
 <style>
-/* ================================================
-   PDP BUYBOX - CANVOY
-   Responsive real, optimizado para Shopify
-   ================================================ */
-
 .pdp-buybox {
   font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   color: #111827;
   background: #fff;
 }
 
-/* GRID PRINCIPAL */
 .pdp-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  gap: 40px;
   max-width: 1200px;
   margin: 0 auto;
   padding: 48px 24px;
+  align-items: start;
 }
 
-/* Mobile: 1 columna, compacto */
 @media screen and (max-width: 749px) {
   .pdp-grid {
     grid-template-columns: 1fr;
     gap: 16px;
-    padding: 20px 16px;
+    padding: 16px;
   }
 }
 
-/* ================================================
-   GALERÍA
-   ================================================ */
-
+/* GALERIA */
 .pdp-gallery {
   position: sticky;
   top: 24px;
 }
 
 @media screen and (max-width: 749px) {
-  .pdp-gallery {
-    position: static;
-  }
+  .pdp-gallery { position: static; }
 }
 
-.pdp-main {
+.pdp-main-img {
   position: relative;
   border-radius: 12px;
   overflow: hidden;
@@ -56,14 +44,14 @@
   aspect-ratio: 1 / 1;
 }
 
-.pdp-main img {
+.pdp-main-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.pdp-badge {
+.pdp-img-badge {
   position: absolute;
   top: 12px;
   left: 12px;
@@ -72,22 +60,20 @@
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   padding: 5px 10px;
   border-radius: 20px;
 }
 
-/* Miniaturas */
 .pdp-thumbs {
   display: flex;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 10px;
+  flex-wrap: wrap;
 }
 
 @media screen and (max-width: 749px) {
-  .pdp-thumbs {
-    display: none;
-  }
+  .pdp-thumbs { display: none; }
 }
 
 .pdp-thumb {
@@ -98,6 +84,7 @@
   cursor: pointer;
   padding: 0;
   background: none;
+  overflow: hidden;
   transition: border-color 0.15s;
 }
 
@@ -110,16 +97,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-/* ================================================
-   INFO (BUY BOX)
-   ================================================ */
-
+/* BUY BOX */
 .pdp-info {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .pdp-label {
@@ -131,44 +116,34 @@
 }
 
 .pdp-title {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.2;
   color: #111827;
   margin: 0;
 }
 
 @media screen and (max-width: 749px) {
-  .pdp-title {
-    font-size: 22px;
-  }
+  .pdp-title { font-size: 22px; }
 }
 
 .pdp-sub {
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.55;
   color: #4B5563;
-  margin: 0;
+  margin: -6px 0 0;
 }
 
-@media screen and (max-width: 749px) {
-  .pdp-sub {
-    font-size: 13px;
-  }
-}
-
-/* Rating */
 .pdp-rating {
   font-size: 13px;
   color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.pdp-stars {
-  color: #F59E0B;
-  letter-spacing: -1px;
-}
+.pdp-stars { color: #F59E0B; }
 
-/* Precio */
 .pdp-price {
   display: flex;
   align-items: baseline;
@@ -183,9 +158,7 @@
 }
 
 @media screen and (max-width: 749px) {
-  .pdp-price__cur {
-    font-size: 24px;
-  }
+  .pdp-price__cur { font-size: 24px; }
 }
 
 .pdp-price__old {
@@ -199,66 +172,18 @@
   color: #16A34A;
   font-size: 12px;
   font-weight: 700;
-  padding: 4px 8px;
+  padding: 3px 8px;
   border-radius: 20px;
 }
 
-/* ================================================
-   VARIANTES
-   ================================================ */
-
-.pdp-variants {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.pdp-var-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #374151;
-}
-
-.pdp-var-opts {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.pdp-var-btn {
-  padding: 8px 16px;
-  border: 1.5px solid #E5E7EB;
-  border-radius: 8px;
-  background: #fff;
-  font-size: 13px;
-  font-weight: 500;
-  color: #374151;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.pdp-var-btn:hover {
-  border-color: #D1D5DB;
-}
-
-.pdp-var-btn.active {
-  border-color: #FF5A1F;
-  background: #FFF0EB;
-  color: #FF5A1F;
-  font-weight: 600;
-}
-
-/* ================================================
-   BULLETS
-   ================================================ */
-
+/* BULLETS */
 .pdp-bullets {
   list-style: none;
   padding: 0;
-  margin: 4px 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
 }
 
 .pdp-bullet {
@@ -270,54 +195,134 @@
 }
 
 .pdp-bullet::before {
-  content: "✓";
+  content: "\2713";
   color: #FF5A1F;
   font-weight: 700;
   font-size: 12px;
+  flex-shrink: 0;
 }
 
-/* ================================================
-   CTA
-   ================================================ */
+/* BUNDLES */
+.pdp-bundles-heading {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
 
+.pdp-bundles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pdp-bundle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 2px solid #E5E7EB;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #fff;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+  width: 100%;
+}
+
+.pdp-bundle.active {
+  border-color: #FF5A1F;
+  background: #FFF8F5;
+}
+
+.pdp-bundle input[type="radio"] {
+  accent-color: #FF5A1F;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.pdp-bundle__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.pdp-bundle__title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.pdp-bundle__saving {
+  font-size: 12px;
+  color: #16A34A;
+  font-weight: 600;
+}
+
+.pdp-bundle__prices {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+
+.pdp-bundle__price {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.pdp-bundle__compare {
+  font-size: 12px;
+  color: #9CA3AF;
+  text-decoration: line-through;
+}
+
+.pdp-bundle__unit {
+  font-size: 11px;
+  color: #6B7280;
+}
+
+.pdp-bundle__badge {
+  font-size: 11px;
+  font-weight: 700;
+  background: #FF5A1F;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* CTA */
 .pdp-cta {
   width: 100%;
-  height: 48px;
+  height: 52px;
   background: #FF5A1F;
   color: #fff;
   border: none;
-  border-radius: 8px;
-  font-size: 15px;
+  border-radius: 10px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.15s;
-  margin-top: 4px;
+  transition: background 0.15s, transform 0.1s;
+  letter-spacing: 0.01em;
 }
 
-.pdp-cta:hover {
-  background: #E54D1B;
-}
+.pdp-cta:hover { background: #E54D1B; }
+.pdp-cta:active { transform: scale(0.98); }
+.pdp-cta:disabled { background: #D1D5DB; cursor: not-allowed; }
 
-.pdp-cta:disabled {
-  background: #D1D5DB;
-  cursor: not-allowed;
-}
-
-/* ================================================
-   TRUST BADGES
-   ================================================ */
-
+/* TRUST */
 .pdp-trust {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
-  padding-top: 4px;
-}
-
-@media screen and (max-width: 749px) {
-  .pdp-trust {
-    gap: 12px;
-  }
+  padding-top: 2px;
 }
 
 .pdp-trust-item {
@@ -327,139 +332,335 @@
   align-items: center;
   gap: 4px;
 }
+
+/* INFO TABS */
+.pdp-info-tabs {
+  border-top: 1px solid #F3F4F6;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pdp-info-tab {
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.pdp-info-tab summary {
+  padding: 10px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pdp-info-tab summary::after {
+  content: "+";
+  font-size: 16px;
+  color: #9CA3AF;
+}
+
+.pdp-info-tab[open] summary::after {
+  content: "-";
+}
+
+.pdp-info-tab__body {
+  font-size: 13px;
+  color: #4B5563;
+  line-height: 1.6;
+  padding-bottom: 12px;
+}
 </style>
 
-<section class="pdp-buybox">
-<div class="pdp-grid">
+<div class="pdp-buybox">
+  <div class="pdp-grid">
 
-<!-- LEFT: Gallery -->
-<div class="pdp-gallery">
-  <div class="pdp-main">
-    {%- if img -%}
-      <img src="{{ img | image_url: width: 800 }}" alt="{{ product.title }}" id="pdp-main-img">
-    {%- else -%}
-      <div style="width:100%;aspect-ratio:1;background:#eee;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:13px">Tu imagen aquí</div>
-    {%- endif -%}
-    {%- if cv.compare_at_price > cv.price -%}
-      <span class="pdp-badge">Ahorra {{ cv.compare_at_price | minus: cv.price | money }}</span>
-    {%- endif -%}
-  </div>
-  {%- if product.media.size > 1 -%}
-    <div class="pdp-thumbs">
-      {%- for media in product.media limit: 4 -%}
-        <button class="pdp-thumb{% if forloop.first %} active{% endif %}" data-src="{{ media | image_url: width: 800 }}">
-          <img src="{{ media | image_url: width: 100 }}" alt="">
-        </button>
-      {%- endfor -%}
-    </div>
-  {%- endif -%}
-</div>
-
-<!-- RIGHT: Buy Box -->
-<div class="pdp-info">
-  <span class="pdp-label">Botella Portátil Perros</span>
-  
-  <h1 class="pdp-title">{{ product.title }}</h1>
-  
-  <p class="pdp-sub">Agua para tu perro en cada paseo, sin derrames ni cuencos.</p>
-
-  <div class="pdp-rating">
-    <span class="pdp-stars">★★★★★</span> 4.9 (127 reseñas)
-  </div>
-
-  <div class="pdp-price">
-    <span class="pdp-price__cur">{{ cv.price | money }}</span>
-    {%- if cv.compare_at_price > cv.price -%}
-      <span class="pdp-price__old">{{ cv.compare_at_price | money }}</span>
-      <span class="pdp-price__save">-{{ cv.compare_at_price | minus: cv.price | times: 100 | divided_by: cv.compare_at_price | round }}%</span>
-    {%- endif -%}
-  </div>
-
-  <!-- Variantes -->
-  {%- unless product.has_only_default_variant -%}
-    <div class="pdp-variants">
-      {%- for option in product.options_with_values -%}
-        <div>
-          <span class="pdp-var-label">{{ option.name }}: {{ option.selected_value }}</span>
-          <div class="pdp-var-opts">
-            {%- for value in option.values -%}
-              <button class="pdp-var-btn{% if value == option.selected_value %} active{% endif %}">{{ value }}</button>
-            {%- endfor -%}
-          </div>
+    <!-- GALERIA -->
+    <div class="pdp-gallery">
+      <div class="pdp-main-img">
+        {%- if img -%}
+          <img src="{{ img | image_url: width: 900 }}" alt="{{ product.title | escape }}" id="pdp-main-img" width="900" height="900" loading="eager">
+        {%- else -%}
+          <div style="width:100%;aspect-ratio:1/1;background:#eee;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:13px">Sin imagen</div>
+        {%- endif -%}
+        {%- if cv.compare_at_price > cv.price -%}
+          <span class="pdp-img-badge">Ahorra {{ cv.compare_at_price | minus: cv.price | money }}</span>
+        {%- endif -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="pdp-thumbs">
+          {%- for media in product.media limit: 5 -%}
+            <button class="pdp-thumb{% if forloop.first %} active{% endif %}" data-src="{{ media | image_url: width: 900 }}" aria-label="Imagen {{ forloop.index }}">
+              <img src="{{ media | image_url: width: 120 }}" alt="" loading="lazy" width="120" height="120">
+            </button>
+          {%- endfor -%}
         </div>
-      {%- endfor -%}
+      {%- endif -%}
     </div>
-  {%- endunless -%}
 
-  <!-- Bullets -->
-  <ul class="pdp-bullets">
-    <li class="pdp-bullet">Cuenco plegable integrado</li>
-    <li class="pdp-bullet">Gancho para mochila o correa</li>
-    <li class="pdp-bullet">Fácil de limpiar</li>
-  </ul>
+    <!-- BUY BOX -->
+    <div class="pdp-info">
 
-  <!-- CTA -->
-  <button class="pdp-cta" id="pdp-atc" data-id="{{ cv.id }}" {% unless cv.available %}disabled{% endunless %}>
-    {%- if cv.available -%}Añadir al carrito{%- else -%}Agotado{%- endif -%}
-  </button>
+      <span class="pdp-label">{{ product.type | default: product.vendor }}</span>
 
-  <!-- Trust -->
-  <div class="pdp-trust">
-    <span class="pdp-trust-item">🚚 Envío</span>
-    <span class="pdp-trust-item">🔒 Pago seguro</span>
-    <span class="pdp-trust-item">🛡️ Garantía</span>
+      <h1 class="pdp-title">{{ product.title }}</h1>
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="pdp-sub">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.review_count_text != blank -%}
+        <div class="pdp-rating">
+          <span class="pdp-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span>{{ section.settings.review_count_text }}</span>
+        </div>
+      {%- endif -%}
+
+      <div class="pdp-price">
+        <span class="pdp-price__cur">{{ cv.price | money }}</span>
+        {%- if cv.compare_at_price > cv.price -%}
+          <span class="pdp-price__old">{{ cv.compare_at_price | money }}</span>
+          <span class="pdp-price__save">-{{ cv.compare_at_price | minus: cv.price | times: 100 | divided_by: cv.compare_at_price | round }}%</span>
+        {%- endif -%}
+      </div>
+
+      {%- assign has_bullets = false -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'bullet' -%}{%- assign has_bullets = true -%}{%- endif -%}
+      {%- endfor -%}
+      {%- if has_bullets -%}
+        <ul class="pdp-bullets">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'bullet' -%}
+              <li class="pdp-bullet" {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- assign has_bundles = false -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'bundle' -%}{%- assign has_bundles = true -%}{%- endif -%}
+      {%- endfor -%}
+
+      {%- if has_bundles -%}
+        {%- if section.settings.bundle_heading != blank -%}
+          <p class="pdp-bundles-heading">{{ section.settings.bundle_heading }}</p>
+        {%- endif -%}
+        <div class="pdp-bundles">
+          {%- assign bundle_index = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'bundle' -%}
+              {%- assign is_first = false -%}
+              {%- if bundle_index == 0 -%}{%- assign is_first = true -%}{%- endif -%}
+              <label class="pdp-bundle{% if is_first %} active{% endif %}" {{ block.shopify_attributes }}>
+                <input type="radio" name="pdp-bundle" value="{{ block.settings.qty }}"
+                  data-qty="{{ block.settings.qty }}"
+                  {% if is_first %}checked{% endif %}>
+                <div class="pdp-bundle__body">
+                  <div class="pdp-bundle__title">{{ block.settings.title }}</div>
+                  {%- if block.settings.saving_text != blank -%}
+                    <div class="pdp-bundle__saving">{{ block.settings.saving_text }}</div>
+                  {%- endif -%}
+                  <div class="pdp-bundle__prices">
+                    <span class="pdp-bundle__price">{{ block.settings.price }}</span>
+                    {%- if block.settings.compare_price != blank -%}
+                      <span class="pdp-bundle__compare">{{ block.settings.compare_price }}</span>
+                    {%- endif -%}
+                    {%- if block.settings.unit_label != blank -%}
+                      <span class="pdp-bundle__unit">{{ block.settings.unit_label }}</span>
+                    {%- endif -%}
+                  </div>
+                </div>
+                {%- if block.settings.badge_text != blank -%}
+                  <span class="pdp-bundle__badge">{{ block.settings.badge_text }}</span>
+                {%- endif -%}
+              </label>
+              {%- assign bundle_index = bundle_index | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <button class="pdp-cta" id="pdp-atc" data-variant-id="{{ cv.id }}" {% unless cv.available %}disabled{% endunless %}>
+        {%- if cv.available -%}Anadir al carrito{%- else -%}Agotado{%- endif -%}
+      </button>
+
+      <div class="pdp-trust">
+        <span class="pdp-trust-item">&#128666; Envio Espana</span>
+        <span class="pdp-trust-item">&#128274; Pago seguro</span>
+        <span class="pdp-trust-item">&#128737; 30 dias garantia</span>
+        <span class="pdp-trust-item">&#128230; Devolucion gratis</span>
+      </div>
+
+      {%- if section.settings.shipping_text != blank or section.settings.returns_text != blank -%}
+        <div class="pdp-info-tabs">
+          {%- if section.settings.shipping_text != blank -%}
+            <details class="pdp-info-tab">
+              <summary>Envio y entrega</summary>
+              <div class="pdp-info-tab__body">{{ section.settings.shipping_text }}</div>
+            </details>
+          {%- endif -%}
+          {%- if section.settings.returns_text != blank -%}
+            <details class="pdp-info-tab">
+              <summary>Devoluciones</summary>
+              <div class="pdp-info-tab__body">{{ section.settings.returns_text }}</div>
+            </details>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    </div>
   </div>
 </div>
-
-</div>
-</section>
 
 <script>
-(function(){
-  // Thumbnails
-  document.querySelectorAll('.pdp-thumb').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      document.querySelectorAll('.pdp-thumb').forEach(function(b){ b.classList.remove('active'); });
+(function () {
+  document.querySelectorAll('.pdp-thumb').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.pdp-thumb').forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
       var img = document.getElementById('pdp-main-img');
-      if(img && btn.dataset.src) img.src = btn.dataset.src;
+      if (img && btn.dataset.src) img.src = btn.dataset.src;
     });
   });
 
-  // Add to cart
-  document.getElementById('pdp-atc')?.addEventListener('click', function(){
-    var btn = this;
-    btn.textContent = 'Añadiendo...';
-    btn.disabled = true;
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({id: parseInt(btn.dataset.id, 10), quantity: 1})
-    })
-    .then(function(){
-      btn.textContent = '✓ Añadido';
-      document.dispatchEvent(new CustomEvent('cart:updated'));
-    })
-    .catch(function(){
-      btn.textContent = 'Error';
-      btn.disabled = false;
-    })
-    .finally(function(){
-      setTimeout(function(){
-        btn.textContent = 'Añadir al carrito';
-        btn.disabled = false;
-      }, 2000);
+  document.querySelectorAll('.pdp-bundle input[type="radio"]').forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      document.querySelectorAll('.pdp-bundle').forEach(function (b) { b.classList.remove('active'); });
+      radio.closest('.pdp-bundle').classList.add('active');
     });
   });
+
+  var atcBtn = document.getElementById('pdp-atc');
+  if (atcBtn) {
+    atcBtn.addEventListener('click', function () {
+      var btn = this;
+      var selectedRadio = document.querySelector('.pdp-bundle input[type="radio"]:checked');
+      var qty = selectedRadio ? parseInt(selectedRadio.dataset.qty, 10) : 1;
+      var variantId = parseInt(btn.dataset.variantId, 10);
+      btn.textContent = 'Anadiendo...';
+      btn.disabled = true;
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: qty })
+      })
+        .then(function () {
+          btn.textContent = 'Anadido al carrito';
+          document.dispatchEvent(new CustomEvent('cart:updated'));
+          setTimeout(function () {
+            btn.textContent = 'Anadir al carrito';
+            btn.disabled = false;
+          }, 2000);
+        })
+        .catch(function () {
+          btn.textContent = 'Error - reintentar';
+          btn.disabled = false;
+        });
+    });
+  }
 })();
 </script>
 
 {% schema %}
 {
   "name": "PDP BuyBox",
-  "tag": "section",
-  "class": "pdp-buybox",
-  "settings": [],
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitulo",
+      "default": "Hidratacion y comida, listas en segundos."
+    },
+    {
+      "type": "text",
+      "id": "review_count_text",
+      "label": "Texto de resenas",
+      "default": "4.9 - 127 resenas"
+    },
+    {
+      "type": "text",
+      "id": "bundle_heading",
+      "label": "Titulo seccion bundles",
+      "default": "COMPRA UN PACK Y AHORRA"
+    },
+    {
+      "type": "textarea",
+      "id": "shipping_text",
+      "label": "Texto envio",
+      "default": "Envio a toda Espana en 3-5 dias habiles. Envio gratuito en pedidos +50EUR."
+    },
+    {
+      "type": "textarea",
+      "id": "returns_text",
+      "label": "Texto devoluciones",
+      "default": "Tienes 30 dias para probarlo. Si no es lo que esperabas, reembolso en 48h sin preguntas."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "bullet",
+      "name": "Bullet beneficio",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texto del bullet",
+          "default": "Beneficio clave del producto"
+        }
+      ]
+    },
+    {
+      "type": "bundle",
+      "name": "Opcion de pack",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Nombre del pack",
+          "default": "CANVOY Pack 1"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Precio",
+          "default": "22,95EUR"
+        },
+        {
+          "type": "text",
+          "id": "compare_price",
+          "label": "Precio tachado (dejar vacio si no aplica)"
+        },
+        {
+          "type": "text",
+          "id": "saving_text",
+          "label": "Texto ahorro"
+        },
+        {
+          "type": "text",
+          "id": "unit_label",
+          "label": "Precio por unidad",
+          "default": "22,95EUR / ud"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge (dejar vacio si no aplica)"
+        },
+        {
+          "type": "number",
+          "id": "qty",
+          "label": "Cantidad a anadir al carrito",
+          "default": 1
+        }
+      ]
+    }
+  ],
   "presets": [
     {
       "name": "PDP BuyBox"
@@ -467,4 +668,3 @@
   ]
 }
 {% endschema %}
-{%- endif -%}
