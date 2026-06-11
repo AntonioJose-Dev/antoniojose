@@ -1,0 +1,24 @@
+{%- comment -%}
+  Snippet: product-sticky-atc
+  Barra sticky de Add to Cart para móvil.
+  Variables esperadas:
+    - product (object)
+    - cv (variant seleccionado)
+{%- endcomment -%}
+
+<div class="pdp-sticky-atc" id="pdp-sticky-atc" aria-hidden="true">
+  <div class="pdp-sticky-atc__inner">
+    <div class="pdp-sticky-atc__info">
+      <div class="pdp-sticky-atc__name" id="pdp-sticky-name">{{ product.title }}</div>
+      <div class="pdp-sticky-atc__price" id="pdp-sticky-price"></div>
+    </div>
+    <button
+      class="pdp-sticky-atc__btn"
+      id="pdp-sticky-btn"
+      data-variant-id="{{ cv.id }}"
+      {%- unless cv.available -%} disabled{%- endunless -%}
+    >
+      {%- if cv.available -%}A&ntilde;adir al carrito{%- else -%}Agotado{%- endif -%}
+    </button>
+  </div>
+</div>

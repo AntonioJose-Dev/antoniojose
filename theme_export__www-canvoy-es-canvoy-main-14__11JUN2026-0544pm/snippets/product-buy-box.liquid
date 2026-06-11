@@ -1,0 +1,80 @@
+{%- comment -%}
+  Snippet: product-buy-box
+  Variables esperadas:
+    - product (object)
+    - cv (variant seleccionado)
+    - section (para settings y blocks)
+{%- endcomment -%}
+
+<div class="pdp-info">
+
+  <span class="pdp-label">{{ product.type | default: product.vendor }}</span>
+
+  <h1 class="pdp-title">{{ product.title }}</h1>
+
+  {%- if section.settings.subtitle != blank -%}
+    <p class="pdp-sub">{{ section.settings.subtitle }}</p>
+  {%- endif -%}
+
+  {%- if section.settings.review_count_text != blank -%}
+    <div class="pdp-rating">
+      <span class="pdp-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      <span>{{ section.settings.review_count_text }}</span>
+    </div>
+  {%- endif -%}
+
+  <div class="pdp-price">
+    <span class="pdp-price__cur">{{ cv.price | money }}</span>
+    {%- if cv.compare_at_price > cv.price -%}
+      <span class="pdp-price__old">{{ cv.compare_at_price | money }}</span>
+      <span class="pdp-price__save">
+        -{{ cv.compare_at_price | minus: cv.price | times: 100 | divided_by: cv.compare_at_price | round }}%
+      </span>
+    {%- endif -%}
+  </div>
+
+  {%- render 'product-meta-bullets', product: product, section: section -%}
+
+  {%- render 'product-bundles', section: section, default_bundle_index: default_bundle_index -%}
+
+  {%- if section.settings.urgency_text != blank -%}
+    <div class="pdp-urgency">
+      <span class="pdp-urgency__icon">&#9889;</span>
+      <span>{{ section.settings.urgency_text }}</span>
+    </div>
+  {%- endif -%}
+
+  <button
+    class="pdp-cta"
+    id="pdp-atc"
+    data-variant-id="{{ cv.id }}"
+    {%- unless cv.available -%} disabled{%- endunless -%}
+  >
+    {%- if cv.available -%}A&ntilde;adir al carrito{%- else -%}Agotado{%- endif -%}
+  </button>
+
+  <div class="pdp-trust">
+    <span class="pdp-trust-item">&#128666; Env&iacute;o Espa&ntilde;a</span>
+    <span class="pdp-trust-item">&#128274; Pago seguro</span>
+    <span class="pdp-trust-item">&#128737; 30 d&iacute;as garant&iacute;a</span>
+    <span class="pdp-trust-item">&#128230; Devoluci&oacute;n gratis</span>
+  </div>
+
+  {%- if section.settings.shipping_text != blank or section.settings.returns_text != blank -%}
+    <div class="pdp-info-tabs">
+      {%- if section.settings.shipping_text != blank -%}
+        <details class="pdp-info-tab">
+          <summary>Env&iacute;o y entrega</summary>
+          <div class="pdp-info-tab__body">{{ section.settings.shipping_text }}</div>
+        </details>
+      {%- endif -%}
+      {%- if section.settings.returns_text != blank -%}
+        <details class="pdp-info-tab">
+          <summary>Devoluciones</summary>
+          <div class="pdp-info-tab__body">{{ section.settings.returns_text }}</div>
+        </details>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+</div>

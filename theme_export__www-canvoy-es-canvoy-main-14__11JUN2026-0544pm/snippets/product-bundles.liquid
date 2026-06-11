@@ -1,0 +1,62 @@
+{%- comment -%}
+  Snippet: product-bundles
+  Muestra el selector de packs/bundles.
+  Variables esperadas:
+    - section (object)
+    - default_bundle_index (integer, calculado en main-product.liquid)
+{%- endcomment -%}
+
+{%- assign has_bundles = false -%}
+{%- for block in section.blocks -%}
+  {%- if block.type == 'bundle' -%}{%- assign has_bundles = true -%}{%- endif -%}
+{%- endfor -%}
+
+{%- if has_bundles -%}
+  {%- if section.settings.bundle_heading != blank -%}
+    <p class="pdp-bundles-heading">{{ section.settings.bundle_heading }}</p>
+  {%- endif -%}
+  <div class="pdp-bundles">
+    {%- assign bundle_index = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'bundle' -%}
+        {%- assign is_default = false -%}
+        {%- if bundle_index == default_bundle_index -%}{%- assign is_default = true -%}{%- endif -%}
+        <label
+          class="pdp-bundle{% if is_default %} active{% endif %}"
+          {{ block.shopify_attributes }}
+          data-bundle-price="{{ block.settings.price }}"
+          data-bundle-title="{{ block.settings.title }}"
+        >
+          <input
+            type="radio"
+            name="pdp-bundle"
+            value="{{ block.settings.qty }}"
+            data-qty="{{ block.settings.qty }}"
+            data-price="{{ block.settings.price }}"
+            data-title="{{ block.settings.title }}"
+            {% if is_default %}checked{% endif %}
+          >
+          <div class="pdp-bundle__body">
+            <div class="pdp-bundle__title">{{ block.settings.title }}</div>
+            {%- if block.settings.saving_text != blank -%}
+              <div class="pdp-bundle__saving">{{ block.settings.saving_text }}</div>
+            {%- endif -%}
+            <div class="pdp-bundle__prices">
+              <span class="pdp-bundle__price">{{ block.settings.price }}</span>
+              {%- if block.settings.compare_price != blank -%}
+                <span class="pdp-bundle__compare">{{ block.settings.compare_price }}</span>
+              {%- endif -%}
+              {%- if block.settings.unit_label != blank -%}
+                <span class="pdp-bundle__unit">{{ block.settings.unit_label }}</span>
+              {%- endif -%}
+            </div>
+          </div>
+          {%- if block.settings.badge_text != blank -%}
+            <span class="pdp-bundle__badge">{{ block.settings.badge_text }}</span>
+          {%- endif -%}
+        </label>
+        {%- assign bundle_index = bundle_index | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}

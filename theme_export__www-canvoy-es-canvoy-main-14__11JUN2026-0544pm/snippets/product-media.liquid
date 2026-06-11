@@ -1,0 +1,39 @@
+{%- comment -%}
+  Snippet: product-media
+  Variables esperadas:
+    - product (object)
+    - cv (variant seleccionado)
+{%- endcomment -%}
+
+<div class="pdp-gallery">
+  <div class="pdp-main-img">
+    {%- if product.featured_image -%}
+      <img
+        src="{{ product.featured_image | image_url: width: 900 }}"
+        alt="{{ product.title | escape }}"
+        id="pdp-main-img"
+        width="900"
+        height="900"
+        loading="eager"
+      >
+    {%- else -%}
+      <div style="width:100%;aspect-ratio:1/1;background:#eee;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:13px">Sin imagen</div>
+    {%- endif -%}
+    {%- if cv.compare_at_price > cv.price -%}
+      <span class="pdp-img-badge">Ahorra {{ cv.compare_at_price | minus: cv.price | money }}</span>
+    {%- endif -%}
+  </div>
+  {%- if product.media.size > 1 -%}
+    <div class="pdp-thumbs">
+      {%- for media in product.media limit: 5 -%}
+        <button
+          class="pdp-thumb{% if forloop.first %} active{% endif %}"
+          data-src="{{ media | image_url: width: 900 }}"
+          aria-label="Imagen {{ forloop.index }}"
+        >
+          <img src="{{ media | image_url: width: 120 }}" alt="" loading="lazy" width="120" height="120">
+        </button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>

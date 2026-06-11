@@ -1,0 +1,32 @@
+{%- comment -%}
+  Snippet: product-meta-bullets
+  Muestra bullets de beneficios.
+  Prioridad: metafield custom.bullets → blocks tipo 'bullet'
+  Variables esperadas:
+    - product (object)
+    - section (object)
+{%- endcomment -%}
+
+{%- assign meta_bullets = product.metafields.custom.bullets.value -%}
+
+{%- if meta_bullets != blank -%}
+  <ul class="pdp-bullets">
+    {%- for bullet in meta_bullets -%}
+      <li class="pdp-bullet">{{ bullet }}</li>
+    {%- endfor -%}
+  </ul>
+{%- else -%}
+  {%- assign has_bullets = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'bullet' -%}{%- assign has_bullets = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if has_bullets -%}
+    <ul class="pdp-bullets">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'bullet' -%}
+          <li class="pdp-bullet" {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+{%- endif -%}
