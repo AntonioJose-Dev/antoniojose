@@ -1,0 +1,611 @@
+/* ==========================================================
+   pdp-buybox.css — Fase 4
+   Estilos del Buy-Box PDP: galería, buy-box, bullets,
+   bundles, sticky ATC y responsive.
+   Carga en main-product.liquid via
+   {{ 'pdp-buybox.css' | asset_url | stylesheet_tag }}
+   ========================================================== */
+
+/* ----------------------------------------------------------
+   1. Tokens locales del PDP
+   ---------------------------------------------------------- */
+:root {
+  --pdp-accent:        #2e7d32;   /* verde natural — mascota/orgánico  */
+  --pdp-accent-hover:  #1b5e20;
+  --pdp-accent-light:  #e8f5e9;
+  --pdp-star:          #f9a825;
+  --pdp-radius:        10px;
+  --pdp-radius-sm:     6px;
+  --pdp-radius-lg:     14px;
+  --pdp-gap:           clamp(1.5rem, 3vw, 2.5rem);
+  --pdp-max:           1200px;
+  --pdp-col-img:       520px;
+  --pdp-shadow:        0 2px 12px rgba(0,0,0,.08);
+  --pdp-shadow-lg:     0 8px 32px rgba(0,0,0,.12);
+  --pdp-transition:    180ms cubic-bezier(.16,1,.3,1);
+
+  /* tipografía PDP */
+  --pdp-title-size:    clamp(1.45rem, 2.5vw, 2rem);
+  --pdp-price-size:    clamp(1.6rem, 2.8vw, 2.2rem);
+  --pdp-body-size:     clamp(.95rem, 1.2vw, 1.05rem);
+  --pdp-sm-size:       .875rem;
+}
+
+/* ----------------------------------------------------------
+   2. Layout principal: grid 2 columnas
+   ---------------------------------------------------------- */
+.pdp-buybox {
+  max-width: var(--pdp-max);
+  margin-inline: auto;
+  padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 3vw, 2rem);
+}
+
+.pdp-grid {
+  display: grid;
+  grid-template-columns: var(--pdp-col-img) 1fr;
+  gap: var(--pdp-gap);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .pdp-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----------------------------------------------------------
+   3. Galería
+   ---------------------------------------------------------- */
+.pdp-gallery {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+/* Imagen principal */
+.pdp-main-img {
+  position: relative;
+  border-radius: var(--pdp-radius-lg);
+  overflow: hidden;
+  background: #f5f5f5;
+  aspect-ratio: 1 / 1;
+}
+
+.pdp-main-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .5s ease;
+}
+
+.pdp-main-img:hover img {
+  transform: scale(1.03);
+}
+
+/* Badge de ahorro sobre imagen */
+.pdp-img-badge {
+  position: absolute;
+  top: .9rem;
+  left: .9rem;
+  background: var(--pdp-accent);
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  padding: .3rem .7rem;
+  border-radius: var(--pdp-radius-sm);
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Thumbnails */
+.pdp-thumbs {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+.pdp-thumb {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--pdp-radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color var(--pdp-transition);
+  background: #f5f5f5;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.pdp-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pdp-thumb:hover,
+.pdp-thumb.active {
+  border-color: var(--pdp-accent);
+}
+
+@media (max-width: 860px) {
+  .pdp-gallery {
+    position: static;
+  }
+  .pdp-thumb { width: 60px; height: 60px; }
+}
+
+/* ----------------------------------------------------------
+   4. Columna info (buy-box)
+   ---------------------------------------------------------- */
+.pdp-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Label tipo/vendor */
+.pdp-label {
+  font-size: var(--pdp-sm-size);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--pdp-accent);
+}
+
+/* Título */
+.pdp-title {
+  font-size: var(--pdp-title-size);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* Subtítulo */
+.pdp-sub {
+  font-size: var(--pdp-body-size);
+  color: #555;
+  line-height: 1.5;
+  margin: -.25rem 0 0;
+}
+
+/* Rating */
+.pdp-rating {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: var(--pdp-sm-size);
+  color: #555;
+}
+
+.pdp-stars {
+  color: var(--pdp-star);
+  letter-spacing: .05em;
+}
+
+/* ----------------------------------------------------------
+   5. Precios
+   ---------------------------------------------------------- */
+.pdp-price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.pdp-price__cur {
+  font-size: var(--pdp-price-size);
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: -.02em;
+}
+
+.pdp-price__old {
+  font-size: 1.1rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.pdp-price__save {
+  font-size: .8rem;
+  font-weight: 700;
+  background: var(--pdp-accent-light);
+  color: var(--pdp-accent);
+  padding: .2rem .55rem;
+  border-radius: var(--pdp-radius-sm);
+}
+
+/* ----------------------------------------------------------
+   6. Bullets de beneficios
+   ---------------------------------------------------------- */
+.pdp-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.pdp-bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: .55rem;
+  font-size: var(--pdp-body-size);
+  color: #333;
+  line-height: 1.45;
+}
+
+.pdp-bullet::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  min-width: 7px;
+  background: var(--pdp-accent);
+  border-radius: 50%;
+  margin-top: .45em;
+}
+
+/* ----------------------------------------------------------
+   7. Heading de bundles
+   ---------------------------------------------------------- */
+.pdp-bundles-heading {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------
+   8. Selector de packs / bundles
+   ---------------------------------------------------------- */
+.pdp-bundles {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+.pdp-bundle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: var(--pdp-radius);
+  cursor: pointer;
+  background: #fff;
+  transition: border-color var(--pdp-transition), background var(--pdp-transition), box-shadow var(--pdp-transition);
+}
+
+.pdp-bundle input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.pdp-bundle::before {
+  content: '';
+  display: block;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background: #fff;
+  transition: border-color var(--pdp-transition), background var(--pdp-transition);
+  flex-shrink: 0;
+}
+
+.pdp-bundle:hover {
+  border-color: #aaa;
+}
+
+.pdp-bundle.active {
+  border-color: var(--pdp-accent);
+  background: var(--pdp-accent-light);
+  box-shadow: 0 0 0 1px var(--pdp-accent) inset;
+}
+
+.pdp-bundle.active::before {
+  border-color: var(--pdp-accent);
+  background: var(--pdp-accent);
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+/* Contenido del bundle */
+.pdp-bundle__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+}
+
+.pdp-bundle__title {
+  font-size: var(--pdp-body-size);
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.pdp-bundle__saving {
+  font-size: .8rem;
+  color: var(--pdp-accent);
+  font-weight: 600;
+}
+
+.pdp-bundle__prices {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-top: .1rem;
+}
+
+.pdp-bundle__price {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+.pdp-bundle__compare {
+  font-size: .85rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.pdp-bundle__unit {
+  font-size: .78rem;
+  color: #777;
+}
+
+/* Badge del bundle (ej. "Más popular") */
+.pdp-bundle__badge {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  background: var(--pdp-accent);
+  color: #fff;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .2rem .6rem;
+  border-radius: var(--pdp-radius-sm);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------
+   9. Urgencia
+   ---------------------------------------------------------- */
+.pdp-urgency {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  font-size: var(--pdp-sm-size);
+  color: #c62828;
+  font-weight: 600;
+  background: #fff3e0;
+  border-radius: var(--pdp-radius-sm);
+  padding: .55rem .85rem;
+}
+
+.pdp-urgency__icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ----------------------------------------------------------
+   10. Botón ATC principal
+   ---------------------------------------------------------- */
+.pdp-cta {
+  display: block;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: var(--pdp-accent);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: .02em;
+  text-align: center;
+  border: none;
+  border-radius: var(--pdp-radius);
+  cursor: pointer;
+  transition:
+    background var(--pdp-transition),
+    transform var(--pdp-transition),
+    box-shadow var(--pdp-transition);
+  box-shadow: 0 4px 16px rgba(46,125,50,.25);
+}
+
+.pdp-cta:hover {
+  background: var(--pdp-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(46,125,50,.35);
+}
+
+.pdp-cta:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(46,125,50,.2);
+}
+
+.pdp-cta:disabled {
+  background: #bdbdbd;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ----------------------------------------------------------
+   11. Trust badges
+   ---------------------------------------------------------- */
+.pdp-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+  border-top: 1px solid #ececec;
+  padding-top: .85rem;
+}
+
+.pdp-trust-item {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .8rem;
+  color: #555;
+  font-weight: 500;
+}
+
+/* ----------------------------------------------------------
+   12. Tabs de info (envío / devoluciones)
+   ---------------------------------------------------------- */
+.pdp-info-tabs {
+  border-top: 1px solid #ececec;
+  padding-top: .5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pdp-info-tab {
+  border-bottom: 1px solid #ececec;
+}
+
+.pdp-info-tab summary {
+  font-size: var(--pdp-sm-size);
+  font-weight: 700;
+  color: #333;
+  padding: .7rem 0;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.pdp-info-tab summary::after {
+  content: '+';
+  font-size: 1.1rem;
+  color: #999;
+  transition: transform var(--pdp-transition);
+  line-height: 1;
+}
+
+.pdp-info-tab[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.pdp-info-tab__body {
+  font-size: var(--pdp-sm-size);
+  color: #666;
+  line-height: 1.6;
+  padding-bottom: .85rem;
+}
+
+/* ----------------------------------------------------------
+   13. Sticky ATC (móvil)
+   ---------------------------------------------------------- */
+.pdp-sticky-atc {
+  display: none; /* JS lo controla — visible cuando main ATC fuera de pantalla */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: #fff;
+  border-top: 1px solid #e0e0e0;
+  padding: .75rem 1rem;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.1);
+}
+
+.pdp-sticky-atc__inner {
+  max-width: var(--pdp-max);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.pdp-sticky-atc__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.pdp-sticky-atc__name {
+  font-size: .8rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pdp-sticky-atc__price {
+  font-size: .9rem;
+  font-weight: 800;
+  color: var(--pdp-accent);
+}
+
+.pdp-sticky-atc__btn {
+  padding: .75rem 1.4rem;
+  background: var(--pdp-accent);
+  color: #fff;
+  font-size: .95rem;
+  font-weight: 800;
+  border: none;
+  border-radius: var(--pdp-radius);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background var(--pdp-transition);
+}
+
+.pdp-sticky-atc__btn:hover {
+  background: var(--pdp-accent-hover);
+}
+
+.pdp-sticky-atc__btn:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+
+/* Sólo mostrar sticky en móvil */
+@media (min-width: 861px) {
+  .pdp-sticky-atc {
+    display: none !important;
+  }
+}
+
+/* ----------------------------------------------------------
+   14. Animación de entrada (reducir movimiento respetado)
+   ---------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .pdp-info > * {
+    animation: pdp-fadein .35s ease both;
+  }
+  .pdp-info > *:nth-child(1) { animation-delay: .04s; }
+  .pdp-info > *:nth-child(2) { animation-delay: .08s; }
+  .pdp-info > *:nth-child(3) { animation-delay: .12s; }
+  .pdp-info > *:nth-child(4) { animation-delay: .16s; }
+  .pdp-info > *:nth-child(5) { animation-delay: .20s; }
+  .pdp-info > *:nth-child(6) { animation-delay: .24s; }
+  .pdp-info > *:nth-child(7) { animation-delay: .28s; }
+  .pdp-info > *:nth-child(8) { animation-delay: .32s; }
+}
+
+@keyframes pdp-fadein {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

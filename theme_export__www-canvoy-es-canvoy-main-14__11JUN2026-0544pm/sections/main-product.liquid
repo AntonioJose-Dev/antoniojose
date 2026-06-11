@@ -4,6 +4,8 @@
   NO contiene HTML de presentación directa.
 {%- endcomment -%}
 
+{{ 'pdp-buybox.css' | asset_url | stylesheet_tag }}
+
 {%- assign cv = product.selected_or_first_available_variant | default: product.variants.first -%}
 
 {%- comment -%} Pre-seleccionar el bundle con badge_text {%- endcomment -%}
@@ -81,7 +83,7 @@
     var qty = selectedRadio ? parseInt(selectedRadio.dataset.qty, 10) : 1;
     var variantId = parseInt(btn.dataset.variantId, 10);
 
-    btn.textContent = 'A\u00F1adiendo\u2026';
+    btn.textContent = 'Añadiendo…';
     btn.disabled = true;
 
     fetch('/cart/add.js', {
@@ -90,7 +92,7 @@
       body: JSON.stringify({ id: variantId, quantity: qty })
     })
       .then(function () {
-        btn.textContent = '\u2713 A\u00F1adido';
+        btn.textContent = '✓ Añadido';
         document.dispatchEvent(new CustomEvent('cart:updated'));
         setTimeout(function () {
           btn.textContent = originalText;
@@ -98,7 +100,7 @@
         }, 2000);
       })
       .catch(function () {
-        btn.textContent = 'Error \u2014 reintentar';
+        btn.textContent = 'Error — reintentar';
         btn.disabled = false;
       });
   }
@@ -122,12 +124,12 @@
 {
   "name": "PDP BuyBox",
   "settings": [
-    { "type": "text", "id": "subtitle", "label": "Subt\u00edtulo", "default": "Hidrataci\u00f3n y comida, listas en segundos." },
-    { "type": "text", "id": "review_count_text", "label": "Texto de rese\u00f1as", "default": "4.9 \u00b7 127 rese\u00f1as" },
-    { "type": "text", "id": "bundle_heading", "label": "T\u00edtulo secci\u00f3n bundles", "default": "COMPRA UN PACK Y AHORRA" },
-    { "type": "text", "id": "urgency_text", "label": "Texto de urgencia (vac\u00edo para ocultar)", "default": "" },
-    { "type": "textarea", "id": "shipping_text", "label": "Texto env\u00edo", "default": "Env\u00edo a toda Espa\u00f1a en 3\u20135 d\u00edas h\u00e1biles. Env\u00edo gratuito en pedidos +50\u20ac." },
-    { "type": "textarea", "id": "returns_text", "label": "Texto devoluciones", "default": "Tienes 30 d\u00edas para probarlo. Reembolso en 48h sin preguntas." }
+    { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "Hidratación y comida, listas en segundos." },
+    { "type": "text", "id": "review_count_text", "label": "Texto de reseñas", "default": "4.9 · 127 reseñas" },
+    { "type": "text", "id": "bundle_heading", "label": "Título sección bundles", "default": "COMPRA UN PACK Y AHORRA" },
+    { "type": "text", "id": "urgency_text", "label": "Texto de urgencia (vacío para ocultar)", "default": "" },
+    { "type": "textarea", "id": "shipping_text", "label": "Texto envío", "default": "Envío a toda España en 3–5 días hábiles. Envío gratuito en pedidos +50€." },
+    { "type": "textarea", "id": "returns_text", "label": "Texto devoluciones", "default": "Tienes 30 días para probarlo. Reembolso en 48h sin preguntas." }
   ],
   "blocks": [
     {
@@ -139,15 +141,15 @@
     },
     {
       "type": "bundle",
-      "name": "Opci\u00f3n de pack",
+      "name": "Opción de pack",
       "settings": [
         { "type": "text", "id": "title", "label": "Nombre del pack", "default": "Pack 1 unidad" },
-        { "type": "text", "id": "price", "label": "Precio", "default": "22,95\u20ac" },
+        { "type": "text", "id": "price", "label": "Precio", "default": "22,95€" },
         { "type": "text", "id": "compare_price", "label": "Precio tachado" },
         { "type": "text", "id": "saving_text", "label": "Texto ahorro" },
-        { "type": "text", "id": "unit_label", "label": "Precio por unidad", "default": "22,95\u20ac / ud" },
-        { "type": "text", "id": "badge_text", "label": "Badge (vac\u00edo si no aplica)", "info": "El primer bundle con badge se pre-selecciona autom\u00e1ticamente" },
-        { "type": "number", "id": "qty", "label": "Cantidad a a\u00f1adir al carrito", "default": 1 }
+        { "type": "text", "id": "unit_label", "label": "Precio por unidad", "default": "22,95€ / ud" },
+        { "type": "text", "id": "badge_text", "label": "Badge (vacío si no aplica)", "info": "El primer bundle con badge se pre-selecciona automáticamente" },
+        { "type": "number", "id": "qty", "label": "Cantidad a añadir al carrito", "default": 1 }
       ]
     }
   ],
